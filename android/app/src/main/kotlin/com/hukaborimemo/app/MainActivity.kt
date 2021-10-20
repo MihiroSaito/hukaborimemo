@@ -1,4 +1,4 @@
-package com.hukaborimemo.hukaborimemo
+package com.hukaborimemo.app
 
 import io.flutter.embedding.android.FlutterActivity
 

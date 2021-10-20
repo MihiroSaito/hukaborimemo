@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.hukaborimemo.hukaborimemo">
+    package="com.hukaborimemo.app">
    <application
-        android:label="hukaborimemo"
+        android:label="深堀りメモ"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
