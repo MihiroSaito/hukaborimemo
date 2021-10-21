@@ -7,14 +7,19 @@ class HomeScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final safeAreaPadding = MediaQuery.of(context).padding;
+    final windowSize = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: Color(0xFFF1F3F5),
       //todo: ダークモード&ライトモードで管理できるように色をメソッドで管理する
-      body: SafeArea(
-        child: Column(
-          children: [
-            homeAppBar(),
-            SingleChildScrollView(
+      body: Column(
+        children: [
+          SizedBox(height: safeAreaPadding.top,),
+          homeAppBar(),
+          Expanded(
+            child: SingleChildScrollView(
                 child: Container(
                   padding: const EdgeInsets.only(left: 15, right: 15),
                   child: Column(
@@ -24,9 +29,11 @@ class HomeScreen extends HookWidget {
                   )
                 )
             ),
-
-          ],
-        ),
+          ),
+          homeBottomBar(
+              safeAreaPaddingBottom: safeAreaPadding.bottom,
+              windowSize: windowSize)
+        ],
       ),
     );
   }
