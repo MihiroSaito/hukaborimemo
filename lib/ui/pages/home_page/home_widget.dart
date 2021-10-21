@@ -1,56 +1,66 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-Widget homeAppBar() {
+Widget homeAppBar({required double safeAreaPaddingTop}) {
+  //todo: 色や背景をスクロールに応じて変える
   return Container(
-    height: 60,
-    width: double.infinity,
-    padding: const EdgeInsets.only(left: 15, right: 15),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    color: Color(0xFFF1F3F5),
+    //todo: （背景色に合わせる）ダークモード&ライトモードで管理できるように色をメソッドで管理する
+    child: Column(
       children: [
-        Material(
-          borderRadius: BorderRadius.all(Radius.circular(5)),
-          clipBehavior: Clip.antiAlias,
-          color: Color(0xFFF1F3F5),
-          //todo: （背景色に合わせる）ダークモード&ライトモードで管理できるように色をメソッドで管理する
-          child: InkWell(
-            onTap: () {
-              //todo: 設定ページへ
-              debugPrint('設定ページへ');
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Icon(
-                CupertinoIcons.gear_alt_fill,
-                size: 26,
-                color: Color(0xFF868E96),
-                //todo: ダークモード&ライトモードで管理できるように色をメソッドで管理する
+        SizedBox(height: safeAreaPaddingTop,),
+        Container(
+          height: 60,
+          width: double.infinity,
+          padding: const EdgeInsets.only(left: 15, right: 15),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Material(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                clipBehavior: Clip.antiAlias,
+                color: Color(0xFFF1F3F5),
+                //todo: （背景色に合わせる）ダークモード&ライトモードで管理できるように色をメソッドで管理する
+                child: InkWell(
+                  onTap: () {
+                    //todo: 設定ページへ
+                    debugPrint('設定ページへ');
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Icon(
+                      CupertinoIcons.gear_alt_fill,
+                      size: 26,
+                      color: Color(0xFF868E96),
+                      //todo: ダークモード&ライトモードで管理できるように色をメソッドで管理する
+                    ),
+                  ),
+                ),
               ),
-            ),
+              Material(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                clipBehavior: Clip.antiAlias,
+                color: Color(0xFFF1F3F5),
+                //todo: （背景色に合わせる）ダークモード&ライトモードで管理できるように色をメソッドで管理する
+                child: InkWell(
+                  onTap: () {
+                    //todo: オプションを表示する
+                    debugPrint('オプション表示');
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Icon(
+                      CupertinoIcons.ellipsis,
+                      size: 26,
+                      color: Color(0xFF5AC4CB),
+                      //todo: テーマで管理できるように色をメソッドで管理する
+                    ),
+                  ),
+                ),
+              )
+            ],
           ),
         ),
-        Material(
-          borderRadius: BorderRadius.all(Radius.circular(5)),
-          clipBehavior: Clip.antiAlias,
-          color: Color(0xFFF1F3F5),
-          //todo: （背景色に合わせる）ダークモード&ライトモードで管理できるように色をメソッドで管理する
-          child: InkWell(
-            onTap: () {
-              //todo: オプションを表示する
-              debugPrint('オプション表示');
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Icon(
-                CupertinoIcons.ellipsis,
-                size: 26,
-                color: Color(0xFF5AC4CB),
-                //todo: テーマで管理できるように色をメソッドで管理する
-              ),
-            ),
-          ),
-        )
       ],
     ),
   );
@@ -112,7 +122,7 @@ Widget homeBottomBar({
         right: 0,
         child: Container(
           height: 50 + safeAreaPaddingBottom,
-          padding: const EdgeInsets.only(left: 15, right: 15),
+          padding: const EdgeInsets.only(left: 20, right: 20),
           decoration: BoxDecoration(
               color: Colors.white,
               //todo: ダークモード&ライトモードで管理できるように色をメソッドで管理する
