@@ -33,7 +33,6 @@ Widget homeAppBar({
                       CupertinoIcons.gear_alt_fill,
                       size: 26,
                       color: Color(0xFF868E96),
-                      //todo: ダークモード&ライトモードで管理できるように色をメソッドで管理する
                     ),
                   ),
                 ),
@@ -143,7 +142,6 @@ Widget homeBottomBar({
                   style: TextStyle(
                     fontSize: 14,
                     color: Theme.of(context).textTheme.bodyText2!.color
-                    //todo: ダークモード&ライトモードで管理できるように色をメソッドで管理する
                   ),
                 ),
               )
