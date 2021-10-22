@@ -145,6 +145,7 @@ Widget gridContent(context) {
               ),
               child: Text(
                 'ありがとうございました、こんにちは！',
+                //todo: メモのタイトルを表示する
                 style: TextStyle(
                   fontSize: 15
                 ),
