@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:hukaborimemo/common/theme/system_theme_notifier.dart';
 import 'package:hukaborimemo/pages/home_page/home_widget.dart';
 
 class HomeScreen extends HookWidget {
@@ -31,7 +30,6 @@ class HomeScreen extends HookWidget {
     }, const []);
 
     return Scaffold(
-      //todo: ダークモード&ライトモードで管理できるように色をメソッドで管理する
       body: Stack(
         children: [
           Padding(

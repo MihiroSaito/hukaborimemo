@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:hukaborimemo/common/theme/system_theme_notifier.dart';
 
 class ThemeClass {
 
@@ -128,17 +126,5 @@ class ThemeClass {
     700: Color(0xFF70F3FF),
   });
   static const int _hukaborimemoColorAccentValue = 0xFFBDF9FF;
-
-
-  static void systemModeHandle(BuildContext context) {
-    final Brightness brightness = MediaQuery.of(context).platformBrightness;
-    if(brightness == Brightness.dark){
-      //ダークモード
-      context.read(systemThemeNotifierProvider.notifier).isDarkMode();
-    } else {
-      //ライトモード
-      context.read(systemThemeNotifierProvider.notifier).isRightMode();
-    }
-  }
 
 }
