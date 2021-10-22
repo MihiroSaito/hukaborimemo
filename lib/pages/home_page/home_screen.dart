@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hukaborimemo/ui/pages/home_page/home_widget.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hukaborimemo/common/theme/system_theme_notifier.dart';
+import 'package:hukaborimemo/pages/home_page/home_widget.dart';
 
 class HomeScreen extends HookWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -10,9 +12,9 @@ class HomeScreen extends HookWidget {
 
     final safeAreaPadding = MediaQuery.of(context).padding;
     final windowSize = MediaQuery.of(context).size;
+    final pageState = useProvider(systemThemeNotifierProvider);
 
     return Scaffold(
-      backgroundColor: Color(0xFFF1F3F5),
       //todo: ダークモード&ライトモードで管理できるように色をメソッドで管理する
       body: Stack(
         children: [
@@ -26,7 +28,7 @@ class HomeScreen extends HookWidget {
               //todo: こんとローラーを追加する
               slivers: [
                 SliverToBoxAdapter(
-                  child: searchBar(),
+                  child: searchBar(context),
                 ),
                 SliverToBoxAdapter(
                   child: SizedBox(
@@ -61,13 +63,16 @@ class HomeScreen extends HookWidget {
             top: 0,
             left: 0,
             right: 0,
-            child: homeAppBar(safeAreaPaddingTop: safeAreaPadding.top),
+            child: homeAppBar(
+                context: context,
+                safeAreaPaddingTop: safeAreaPadding.top),
           ),
           Positioned(
             bottom: 0,
             left: 0,
             right: 0,
             child: homeBottomBar(
+                context: context,
                 safeAreaPaddingBottom: safeAreaPadding.bottom,
                 windowSize: windowSize),
           )

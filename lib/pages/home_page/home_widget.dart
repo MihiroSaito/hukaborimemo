@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-Widget homeAppBar({required double safeAreaPaddingTop}) {
+Widget homeAppBar({
+  required BuildContext context,
+  required double safeAreaPaddingTop
+}) {
   //todo: 色や背景をスクロールに応じて変える
   return Container(
-    color: Color(0xFFF1F3F5),
-    //todo: （背景色に合わせる）ダークモード&ライトモードで管理できるように色をメソッドで管理する
+    color: Theme.of(context).scaffoldBackgroundColor,
     child: Column(
       children: [
         SizedBox(height: safeAreaPaddingTop,),
@@ -19,8 +21,7 @@ Widget homeAppBar({required double safeAreaPaddingTop}) {
               Material(
                 borderRadius: BorderRadius.all(Radius.circular(5)),
                 clipBehavior: Clip.antiAlias,
-                color: Color(0xFFF1F3F5),
-                //todo: （背景色に合わせる）ダークモード&ライトモードで管理できるように色をメソッドで管理する
+                color: Theme.of(context).scaffoldBackgroundColor,
                 child: InkWell(
                   onTap: () {
                     //todo: 設定ページへ
@@ -40,8 +41,7 @@ Widget homeAppBar({required double safeAreaPaddingTop}) {
               Material(
                 borderRadius: BorderRadius.all(Radius.circular(5)),
                 clipBehavior: Clip.antiAlias,
-                color: Color(0xFFF1F3F5),
-                //todo: （背景色に合わせる）ダークモード&ライトモードで管理できるように色をメソッドで管理する
+                color: Theme.of(context).scaffoldBackgroundColor,
                 child: InkWell(
                   onTap: () {
                     //todo: オプションを表示する
@@ -66,7 +66,7 @@ Widget homeAppBar({required double safeAreaPaddingTop}) {
   );
 }
 
-Widget searchBar() {
+Widget searchBar(BuildContext context) {
   return GestureDetector(
     onTap: () {
       //todo: 検索画面を表示する
@@ -75,8 +75,7 @@ Widget searchBar() {
     child: Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
-        color: Color(0xFFDEE2E6)
-        //todo: ダークモード&ライトモードで管理できるように色をメソッドで管理する
+        color: Theme.of(context).cardTheme.color
       ),
       child: Center(
         child: Padding(
@@ -88,7 +87,6 @@ Widget searchBar() {
                 CupertinoIcons.search,
                 size: 20,
                 color: Color(0xFF868E96)
-                //todo: ダークモード&ライトモードで管理できるように色をメソッドで管理する
               ),
               SizedBox(width: 5,),
               Text(
@@ -96,7 +94,6 @@ Widget searchBar() {
                 style: TextStyle(
                   fontSize: 17,
                   color: Color(0xFF868E96)
-                  //todo: ダークモード&ライトモードで管理できるように色をメソッドで管理する
                 ),
               ),
             ],
@@ -108,8 +105,9 @@ Widget searchBar() {
 }
 
 Widget homeBottomBar({
+  required BuildContext context,
   required double safeAreaPaddingBottom,
-  required Size windowSize
+  required Size windowSize,
 }) {
   return Stack(
     children: [
@@ -124,8 +122,7 @@ Widget homeBottomBar({
           height: 50 + safeAreaPaddingBottom,
           padding: const EdgeInsets.only(left: 20, right: 20),
           decoration: BoxDecoration(
-              color: Colors.white,
-              //todo: ダークモード&ライトモードで管理できるように色をメソッドで管理する
+              color: Theme.of(context).cardTheme.color,
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.05),
@@ -145,7 +142,7 @@ Widget homeBottomBar({
                   //todo: メモの数を表示する
                   style: TextStyle(
                     fontSize: 14,
-                    color: Color(0xFF868E96)
+                    color: Theme.of(context).textTheme.bodyText2!.color
                     //todo: ダークモード&ライトモードで管理できるように色をメソッドで管理する
                   ),
                 ),
