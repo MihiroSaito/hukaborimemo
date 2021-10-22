@@ -11,8 +11,10 @@ class ThemeClass {
       brightness: Brightness.light,
       scaffoldBackgroundColor: Color(0xFFF1F3F5),
       cardTheme: CardTheme(
-          color: Color(0xFFDEE2E6)
+          color: Colors.white
       ),
+      dialogBackgroundColor: Color(0xFFDEE2E6),
+      indicatorColor: Colors.grey[200],
       textTheme: lightTextTheme,
     );
   }
@@ -25,6 +27,8 @@ class ThemeClass {
       cardTheme: CardTheme(
        color: Color(0xFF2A2A2A)
       ),
+      dialogBackgroundColor: Color(0xFF2A2A2A),
+      indicatorColor: Colors.grey[900],
       textTheme: darkTextTheme,
     );
   }
@@ -37,16 +41,12 @@ class ThemeClass {
     bodyText1: GoogleFonts.openSans(
       fontSize: 14.0,
       fontWeight: FontWeight.w700,
-      color: Colors.black,
-    ),
-    bodyText2: GoogleFonts.notoSans(
-      fontSize: 14.0,
       color: Color(0xFF868E96),
     ),
     headline1: GoogleFonts.openSans(
       fontSize: 32.0,
       fontWeight: FontWeight.bold,
-      color: Colors.black,
+      color: Color(0xFF868E96),
     ),
     headline2: GoogleFonts.openSans(
       fontSize: 21.0,
@@ -58,10 +58,15 @@ class ThemeClass {
       fontWeight: FontWeight.w600,
       color: Colors.black,
     ),
+    headline5: GoogleFonts.openSans(
+      fontSize: 20.0,
+      fontWeight: FontWeight.w600,
+      color: Color(0xFF868E96),
+    ),
     headline6: GoogleFonts.openSans(
       fontSize: 20.0,
       fontWeight: FontWeight.w600,
-      color: Colors.black,
+      color: Color(0xFFADB5BD),
     ),
   );
 
@@ -73,7 +78,7 @@ class ThemeClass {
     ),
     bodyText2: GoogleFonts.notoSans(
       fontSize: 14.0,
-      color: Color(0xFF868E96),
+      color: Colors.white,
     ),
     headline1: GoogleFonts.openSans(
       fontSize: 32.0,
@@ -90,10 +95,15 @@ class ThemeClass {
       fontWeight: FontWeight.w600,
       color: Colors.white,
     ),
+    headline5: GoogleFonts.openSans(
+      fontSize: 20.0,
+      fontWeight: FontWeight.w600,
+      color: Color(0xFF868E96),
+    ),
     headline6: GoogleFonts.openSans(
       fontSize: 20.0,
       fontWeight: FontWeight.w600,
-      color: Colors.white,
+      color: Color(0xFF495057),
     ),
   );
 

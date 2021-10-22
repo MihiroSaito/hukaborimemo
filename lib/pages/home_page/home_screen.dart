@@ -5,14 +5,30 @@ import 'package:hukaborimemo/common/theme/system_theme_notifier.dart';
 import 'package:hukaborimemo/pages/home_page/home_widget.dart';
 
 class HomeScreen extends HookWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({Key? key}) : super(key: key);
+  final isDisplayedAppbarProvider = StateProvider((ref) => false);
 
   @override
   Widget build(BuildContext context) {
 
     final safeAreaPadding = MediaQuery.of(context).padding;
     final windowSize = MediaQuery.of(context).size;
-    final pageState = useProvider(systemThemeNotifierProvider);
+    final ScrollController controller = useScrollController();
+    final isDisplayedAppbar = useProvider(isDisplayedAppbarProvider);
+
+    useEffect(() {
+      controller.addListener(() {
+        double scrollOffset = controller.offset;
+        if (scrollOffset > 40) {
+          isDisplayedAppbar.state = true;
+        } else if (scrollOffset < 40) {
+          isDisplayedAppbar.state = false;
+        }
+      });
+      return (){
+        controller.dispose();
+      };
+    }, const []);
 
     return Scaffold(
       //todo: ダークモード&ライトモードで管理できるように色をメソッドで管理する
@@ -22,17 +38,21 @@ class HomeScreen extends HookWidget {
             padding: EdgeInsets.only(
                 left: 15,
                 right: 15,
-                top: safeAreaPadding.top + 60,
                 bottom: safeAreaPadding.bottom + 50),
             child: CustomScrollView(
-              //todo: こんとローラーを追加する
+              controller: controller,
               slivers: [
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: safeAreaPadding.top + 60,
+                  ),
+                ),
                 SliverToBoxAdapter(
                   child: searchBar(context),
                 ),
                 SliverToBoxAdapter(
                   child: SizedBox(
-                    height: 20,
+                    height: 30,
                   ),
                 ),
                 SliverGrid(
@@ -40,13 +60,11 @@ class HomeScreen extends HookWidget {
                     mainAxisSpacing: 10.0,
                     crossAxisSpacing: 10.0,
                     crossAxisCount: 3,
+                    childAspectRatio: 0.8
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index){
-                      return Container(
-                        color: Colors.white,
-                      );
-                      //todo: コンテンツを表示する
+                      return gridContent(context);
                     },
                     childCount: 30,
                   ),
@@ -65,7 +83,8 @@ class HomeScreen extends HookWidget {
             right: 0,
             child: homeAppBar(
                 context: context,
-                safeAreaPaddingTop: safeAreaPadding.top),
+                safeAreaPaddingTop: safeAreaPadding.top,
+                isDisplayedAppbar: isDisplayedAppbar),
           ),
           Positioned(
             bottom: 0,

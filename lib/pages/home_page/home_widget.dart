@@ -1,66 +1,84 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 Widget homeAppBar({
   required BuildContext context,
-  required double safeAreaPaddingTop
+  required double safeAreaPaddingTop,
+  required StateController<bool> isDisplayedAppbar
 }) {
-  //todo: 色や背景をスクロールに応じて変える
   return Container(
-    color: Theme.of(context).scaffoldBackgroundColor,
-    child: Column(
-      children: [
-        SizedBox(height: safeAreaPaddingTop,),
-        Container(
-          height: 60,
-          width: double.infinity,
-          padding: const EdgeInsets.only(left: 15, right: 15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Material(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                clipBehavior: Clip.antiAlias,
-                color: Theme.of(context).scaffoldBackgroundColor,
-                child: InkWell(
-                  onTap: () {
-                    //todo: 設定ページへ
-                    debugPrint('設定ページへ');
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Icon(
-                      CupertinoIcons.gear_alt_fill,
-                      size: 26,
-                      color: Color(0xFF868E96),
+    color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.4),
+    child: ClipRect(
+      child: BackdropFilter(
+        filter: isDisplayedAppbar.state
+            ? ImageFilter.blur(sigmaX: 10, sigmaY: 10)
+            : ImageFilter.blur(sigmaX: 0, sigmaY: 0),
+        child: Column(
+          children: [
+            Container(
+              height: 60 + safeAreaPaddingTop,
+              width: double.infinity,
+              padding: EdgeInsets.only(left: 15, right: 15, top: safeAreaPaddingTop),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Material(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    clipBehavior: Clip.antiAlias,
+                    color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0),
+                    child: InkWell(
+                      onTap: () {
+                        //todo: 設定ページへ
+                        debugPrint('設定ページへ');
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Icon(
+                          CupertinoIcons.gear_alt_fill,
+                          size: 26,
+                          color: Color(0xFF868E96),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  Material(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    clipBehavior: Clip.antiAlias,
+                    color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0),
+                    child: InkWell(
+                      onTap: () {
+                        //todo: オプションを表示する
+                        debugPrint('オプション表示');
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Icon(
+                          CupertinoIcons.ellipsis,
+                          size: 26,
+                          color: Color(0xFF5AC4CB),
+                          //todo: テーマで管理できるように色をメソッドで管理する
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
-              Material(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                clipBehavior: Clip.antiAlias,
-                color: Theme.of(context).scaffoldBackgroundColor,
-                child: InkWell(
-                  onTap: () {
-                    //todo: オプションを表示する
-                    debugPrint('オプション表示');
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Icon(
-                      CupertinoIcons.ellipsis,
-                      size: 26,
-                      color: Color(0xFF5AC4CB),
-                      //todo: テーマで管理できるように色をメソッドで管理する
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
+            ),
+            AnimatedOpacity(
+              opacity: isDisplayedAppbar.state? 1.0 : 0.0,
+              duration: Duration(milliseconds: 100),
+              child: Container(
+                height: 1,
+                width: MediaQuery.of(context).size.width,
+                color: Theme.of(context).indicatorColor,
+              ),
+            )
+          ],
         ),
-      ],
+      ),
     ),
   );
 }
@@ -74,7 +92,7 @@ Widget searchBar(BuildContext context) {
     child: Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
-        color: Theme.of(context).cardTheme.color
+        color: Theme.of(context).dialogBackgroundColor
       ),
       child: Center(
         child: Padding(
@@ -98,6 +116,66 @@ Widget searchBar(BuildContext context) {
             ],
           ),
         ),
+      ),
+    ),
+  );
+}
+
+Widget gridContent(context) {
+  return Padding(
+    padding: const EdgeInsets.all(3),
+    child: Container(
+      child: Column(
+        children: [
+          AspectRatio(
+            aspectRatio: 1.0,
+            child: Container(
+              padding: const EdgeInsets.all(7),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: Theme.of(context).cardTheme.color,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    spreadRadius: 2,
+                    blurRadius: 10,
+                    offset: Offset(0, 3),
+                  )
+                ]
+              ),
+              child: Text(
+                'ありがとうございました、こんにちは！',
+                style: TextStyle(
+                  fontSize: 15
+                ),
+              ),
+            ),
+          ),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.only(right: 5, left: 5, top: 7),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: Container()
+                ),
+                Expanded(
+                  flex: 7,
+                  child: FittedBox(
+                    child: Text(
+                      '2020/10/16',
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.headline6!.color,
+                      ),
+                      textAlign: TextAlign.end,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     ),
   );
@@ -141,7 +219,7 @@ Widget homeBottomBar({
                   //todo: メモの数を表示する
                   style: TextStyle(
                     fontSize: 14,
-                    color: Theme.of(context).textTheme.bodyText2!.color
+                    color: Theme.of(context).textTheme.headline5!.color
                   ),
                 ),
               )
