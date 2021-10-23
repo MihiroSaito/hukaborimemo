@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hukaborimemo/pages/home_page/home_viewmodel.dart';
+import 'package:hukaborimemo/route/route.dart';
 
 Widget homeAppBar({
   required BuildContext context,
@@ -130,25 +131,30 @@ Widget gridContent(context) {
         children: [
           AspectRatio(
             aspectRatio: 1.0,
-            child: Container(
-              padding: const EdgeInsets.all(7),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Theme.of(context).cardTheme.color,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    spreadRadius: 2,
-                    blurRadius: 10,
-                    offset: Offset(0, 3),
-                  )
-                ]
-              ),
-              child: Text(
-                'ありがとうございました、こんにちは！',
-                //todo: メモのタイトルを表示する
-                style: TextStyle(
-                  fontSize: 15
+            child: GestureDetector(
+              onTap: (){
+                toMemoScreen(context: context);
+              },
+              child: Container(
+                padding: const EdgeInsets.all(7),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Theme.of(context).cardTheme.color,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      spreadRadius: 2,
+                      blurRadius: 10,
+                      offset: Offset(0, 3),
+                    )
+                  ]
+                ),
+                child: Text(
+                  'ありがとうございました、こんにちは！',
+                  //todo: メモのタイトルを表示する
+                  style: TextStyle(
+                    fontSize: 15
+                  ),
                 ),
               ),
             ),

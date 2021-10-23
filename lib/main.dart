@@ -1,3 +1,4 @@
+import 'package:cupertino_back_gesture/cupertino_back_gesture.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hukaborimemo/setting/theme.dart';
@@ -14,12 +15,15 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '深堀りメモ',
-      theme: ThemeClass.light(),
-      darkTheme: ThemeClass.dark(),
-      themeMode: ThemeMode.system,
-      home: HomeScreen(),
+    return BackGestureWidthTheme(
+      backGestureWidth: BackGestureWidth.fraction(2 / 5),
+      child: MaterialApp(
+        title: '深堀りメモ',
+        theme: ThemeClass.light(),
+        darkTheme: ThemeClass.dark(),
+        themeMode: ThemeMode.system,
+        home: HomeScreen(),
+      ),
     );
   }
 }

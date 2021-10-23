@@ -1,3 +1,4 @@
+import 'package:cupertino_back_gesture/cupertino_back_gesture.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -14,6 +15,12 @@ class ThemeClass {
       dialogBackgroundColor: Color(0xFFDEE2E6),
       indicatorColor: Colors.grey[200],
       textTheme: lightTextTheme,
+      pageTransitionsTheme: PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: CupertinoPageTransitionsBuilderCustomBackGestureWidth(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilderCustomBackGestureWidth(),
+        },
+      ),
     );
   }
 
@@ -28,6 +35,12 @@ class ThemeClass {
       dialogBackgroundColor: Color(0xFF2A2A2A),
       indicatorColor: Colors.grey[900],
       textTheme: darkTextTheme,
+      pageTransitionsTheme: PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: CupertinoPageTransitionsBuilderCustomBackGestureWidth(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilderCustomBackGestureWidth(),
+        },
+      ),
     );
   }
 

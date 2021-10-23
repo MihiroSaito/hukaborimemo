@@ -30,6 +30,7 @@ dependencies:
   flutter_native_splash: ^1.2.1
   freezed_annotation: ^0.14.0
   google_fonts: ^2.1.0
+  cupertino_back_gesture: ^0.1.0
 
 dev_dependencies:
   flutter_test:
