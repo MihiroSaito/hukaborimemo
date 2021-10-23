@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hukaborimemo/pages/home_page/home_viewmodel.dart';
 
 Widget homeAppBar({
   required BuildContext context,
@@ -50,7 +51,7 @@ Widget homeAppBar({
                     color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0),
                     child: InkWell(
                       onTap: () {
-                        //todo: オプションを表示する
+                        showHomeOptionDialog(context);
                         debugPrint('オプション表示');
                       },
                       child: Padding(
@@ -271,3 +272,108 @@ Widget homeBottomBar({
   );
 }
 
+Widget homeOptionDialogWidget(BuildContext context) {
+  return GestureDetector(
+    onTap: () {
+      Navigator.pop(context);
+    },
+    child: Material(
+      color: Colors.transparent,
+      child: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            SizedBox(height: 60,),
+            Container(
+              //todo: タブレットサイズの対応をする
+              width: MediaQuery.of(context).size.width * 0.6,
+              height: 100,
+              margin: const EdgeInsets.only(right: 20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    spreadRadius: 10,
+                    blurRadius: 20,
+                    offset: Offset(0, 0),
+                  )
+                ]
+              ),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Material(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15)),
+                      clipBehavior: Clip.antiAlias,
+                      color: Colors.white,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                          //todo: 選択モードに切り替える
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.only(left: 15, right: 15, top: 1),
+                          child: Row(
+                            children: [
+                              Icon(
+                                CupertinoIcons.checkmark_alt_circle,
+                                size: 21,
+                              ),
+                              SizedBox(width: 5,),
+                              Text(
+                                '選択'
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 1,
+                    width: double.infinity,
+                    color: Colors.grey[200],
+                  ),
+                  Expanded(
+                    child: Material(
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(15),
+                          bottomRight: Radius.circular(15)),
+                      clipBehavior: Clip.antiAlias,
+                      color: Colors.white,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                          //todo: 表示順序を更新を元に新しい順と古い順で並び替える
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.only(left: 15, right: 15, bottom: 1),
+                          child: Row(
+                            children: [
+                              Icon(
+                                CupertinoIcons.arrow_up_arrow_down,
+                                size: 20,
+                              ),
+                              SizedBox(width: 5,),
+                              Text(
+                                  '表示順序',
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    ),
+  );
+}
