@@ -18,9 +18,9 @@ class HomeScreen extends HookWidget {
     useEffect(() {
       controller.addListener(() {
         double scrollOffset = controller.offset;
-        if (scrollOffset > 40) {
+        if (scrollOffset > 5) {
           isDisplayedAppbar.state = true;
-        } else if (scrollOffset < 40) {
+        } else if (scrollOffset < 5) {
           isDisplayedAppbar.state = false;
         }
       });

@@ -290,7 +290,7 @@ Widget homeOptionDialogWidget(BuildContext context) {
               height: 100,
               margin: const EdgeInsets.only(right: 20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).cardTheme.color,
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
@@ -309,7 +309,7 @@ Widget homeOptionDialogWidget(BuildContext context) {
                           topLeft: Radius.circular(15),
                           topRight: Radius.circular(15)),
                       clipBehavior: Clip.antiAlias,
-                      color: Colors.white,
+                      color: Theme.of(context).cardTheme.color,
                       child: InkWell(
                         onTap: () {
                           Navigator.pop(context);
@@ -336,7 +336,7 @@ Widget homeOptionDialogWidget(BuildContext context) {
                   Container(
                     height: 1,
                     width: double.infinity,
-                    color: Colors.grey[200],
+                    color: Theme.of(context).indicatorColor,
                   ),
                   Expanded(
                     child: Material(
@@ -344,7 +344,7 @@ Widget homeOptionDialogWidget(BuildContext context) {
                           bottomLeft: Radius.circular(15),
                           bottomRight: Radius.circular(15)),
                       clipBehavior: Clip.antiAlias,
-                      color: Colors.white,
+                      color: Theme.of(context).cardTheme.color,
                       child: InkWell(
                         onTap: () {
                           Navigator.pop(context);
