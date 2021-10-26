@@ -123,7 +123,10 @@ Widget searchBar(BuildContext context) {
   );
 }
 
-Widget gridContent(context) {
+Widget gridContent({
+  required BuildContext context,
+  required String memoTitle,
+}) {
   return Padding(
     padding: const EdgeInsets.all(3),
     child: Container(
@@ -133,7 +136,11 @@ Widget gridContent(context) {
             aspectRatio: 1.0,
             child: GestureDetector(
               onTap: (){
-                toMemoScreen(context: context);
+                toMemoScreen(
+                    context: context,
+                    title: memoTitle,
+                    isFirstPage: true,
+                    prePageTitle: null);
               },
               child: Container(
                 padding: const EdgeInsets.all(7),
@@ -149,11 +156,12 @@ Widget gridContent(context) {
                     )
                   ]
                 ),
-                child: Text(
-                  'ありがとうございました、こんにちは！',
-                  //todo: メモのタイトルを表示する
-                  style: TextStyle(
-                    fontSize: 15
+                child: Center(
+                  child: Text(
+                    '$memoTitle',
+                    style: TextStyle(
+                      fontSize: 15
+                    ),
                   ),
                 ),
               ),

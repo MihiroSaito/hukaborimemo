@@ -3,6 +3,21 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hukaborimemo/pages/home_page/home_widgets.dart';
 
+//todo: 本物のデータに変える
+const List<Map<String, dynamic>> sampleItem = [
+  {'id': 1, 'parent_id': 0, 'text': 'なぜお金がたまらないのか', 'tag_id': null},
+  {'id': 2, 'parent_id': 0, 'text': 'なぜお金がたまらないのか', 'tag_id': null},
+  {'id': 3, 'parent_id': 0, 'text': 'なぜお金がたまらないのか', 'tag_id': null},
+  {'id': 4, 'parent_id': 0, 'text': 'なぜお金がたまらないのか', 'tag_id': null},
+  {'id': 5, 'parent_id': 0, 'text': 'なぜお金がたまらないのか', 'tag_id': null},
+  {'id': 6, 'parent_id': 0, 'text': 'なぜお金がたまらないのか', 'tag_id': null},
+  {'id': 7, 'parent_id': 0, 'text': 'なぜお金がたまらないのか', 'tag_id': null},
+  {'id': 8, 'parent_id': 0, 'text': 'なぜお金がたまらないのか', 'tag_id': null},
+  {'id': 9, 'parent_id': 0, 'text': 'なぜお金がたまらないのか', 'tag_id': null},
+  {'id': 10, 'parent_id': 0, 'text': 'なぜお金がたまらないのか', 'tag_id': null},
+  {'id': 11, 'parent_id': 0, 'text': 'なぜお金がたまらないのか', 'tag_id': null},
+  {'id': 12, 'parent_id': 0, 'text': 'なぜお金がたまらないのか', 'tag_id': null},];
+
 class HomeScreen extends HookWidget {
   HomeScreen({Key? key}) : super(key: key);
   final isDisplayedAppbarProvider = StateProvider((ref) => false);
@@ -25,7 +40,7 @@ class HomeScreen extends HookWidget {
         }
       });
       return (){
-        controller.dispose();
+        // controller.dispose();
       };
     }, const []);
 
@@ -62,9 +77,11 @@ class HomeScreen extends HookWidget {
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index){
-                      return gridContent(context);
+                      return gridContent(
+                          context: context,
+                          memoTitle: sampleItem[index]['text']);
                     },
-                    childCount: 30,
+                    childCount: sampleItem.length,
                   ),
                 ),
                 SliverToBoxAdapter(

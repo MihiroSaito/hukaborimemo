@@ -5,11 +5,30 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'memo_widgets.dart';
 
 //todo: 本物のデータに変える
-const sampleItem = ['', '', '', '', '', '', '', '', '', ];
-// const sampleItem = [];
+const List<Map<String, dynamic>> sampleItem = [
+  {'id': 30, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
+  {'id': 31, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
+  {'id': 32, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
+  {'id': 33, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
+  {'id': 34, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
+  {'id': 35, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
+  {'id': 36, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
+  {'id': 37, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
+  {'id': 38, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
+  {'id': 39, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
+  {'id': 40, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
+  {'id': 41, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},];
 
 class MemoScreen extends HookWidget {
-  MemoScreen({Key? key}) : super(key: key);
+  MemoScreen({
+    Key? key,
+    required this.title,
+    required this.isFirstPage,
+    required this.prePageTitle}) : super(key: key);
+  final String title;
+  final bool isFirstPage;
+  final String? prePageTitle;
+
   final isDisplayedAppbarProvider = StateProvider((ref) => false);
 
   @override
@@ -30,7 +49,7 @@ class MemoScreen extends HookWidget {
         }
       });
       return (){
-        controller.dispose();
+        // controller.dispose();
       };
     }, const []);
 
@@ -48,7 +67,10 @@ class MemoScreen extends HookWidget {
                 ),
               ),
               SliverToBoxAdapter(
-                child: memoTitleArea(context: context)
+                child: memoTitleArea(
+                    context: context,
+                    title: title,
+                    isFirstPage: isFirstPage)
               ),
               SliverPadding(
                 padding: const EdgeInsets.only(left: 10, right: 15),
@@ -66,11 +88,15 @@ class MemoScreen extends HookWidget {
                       if(index == sampleItem.length - 1){
                         return memoListContent(
                             context: context,
-                            isLastItem: true);
+                            isLastItem: true,
+                            contentText: sampleItem[index]['text'],
+                            title: '$title');
                       } else {
                         return memoListContent(
                             context: context,
-                            isLastItem: false);
+                            isLastItem: false,
+                            contentText: sampleItem[index]['text'],
+                            title: '$title');
                       }
                     },
                     childCount: sampleItem.length
@@ -97,7 +123,9 @@ class MemoScreen extends HookWidget {
             child: memoAppBar(
                 context: context,
                 safeAreaPaddingTop: safeAreaPadding.top,
-                isDisplayedAppbar: isDisplayedAppbar),
+                isDisplayedAppbar: isDisplayedAppbar,
+                isFirstPage: isFirstPage,
+                prePageTitle: prePageTitle),
           ),
         ],
       ),
