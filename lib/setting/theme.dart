@@ -14,6 +14,8 @@ class ThemeClass {
       ),
       dialogBackgroundColor: Color(0xFFDEE2E6),
       indicatorColor: Colors.grey[200],
+      bottomAppBarColor: Color(0xFFE9ECEF),
+      dividerColor: Color(0xFFCED4DA),
       textTheme: lightTextTheme,
       pageTransitionsTheme: PageTransitionsTheme(
         builders: {
@@ -34,6 +36,8 @@ class ThemeClass {
       ),
       dialogBackgroundColor: Color(0xFF2A2A2A),
       indicatorColor: Colors.grey[900],
+      bottomAppBarColor: Color(0xFF495057),
+      dividerColor: Color(0xFF343A40),
       textTheme: darkTextTheme,
       pageTransitionsTheme: PageTransitionsTheme(
         builders: {
