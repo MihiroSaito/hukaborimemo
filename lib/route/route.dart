@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hukaborimemo/pages/memo_page/memo_screen.dart';
+import 'package:hukaborimemo/pages/setting_page/setting_screen.dart';
 
 Future<void> toMemoScreen({
   required BuildContext context,
@@ -13,5 +14,13 @@ Future<void> toMemoScreen({
         isFirstPage: isFirstPage,
         prePageTitle: prePageTitle,
       ))
+  );
+}
+
+void toSettingScreen({
+  required BuildContext context
+}) {
+  Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => SettingScreen())
   );
 }

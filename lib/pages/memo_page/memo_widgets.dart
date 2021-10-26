@@ -286,7 +286,7 @@ Widget memoListContent({
                               ),
                               child: Text(
                                 //todo: content['tag_id']をつかってタグの名前に変更する
-                                'なぜ',
+                                'なぜ？',
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.white,

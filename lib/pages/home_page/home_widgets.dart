@@ -33,8 +33,7 @@ Widget homeAppBar({
                     color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0),
                     child: InkWell(
                       onTap: () {
-                        //todo: 設定ページへ
-                        debugPrint('設定ページへ');
+                        toSettingScreen(context: context);
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8),
@@ -53,7 +52,6 @@ Widget homeAppBar({
                     child: InkWell(
                       onTap: () {
                         showHomeOptionDialog(context);
-                        debugPrint('オプション表示');
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8),
