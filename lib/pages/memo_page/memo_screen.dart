@@ -6,7 +6,7 @@ import 'memo_widgets.dart';
 
 //todo: 本物のデータに変える
 const List<Map<String, dynamic>> sampleItem = [
-  {'id': 30, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
+  {'id': 30, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': 1},
   {'id': 31, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
   {'id': 32, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
   {'id': 33, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
@@ -18,6 +18,15 @@ const List<Map<String, dynamic>> sampleItem = [
   {'id': 39, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
   {'id': 40, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
   {'id': 41, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},];
+
+const List<Map<String, dynamic>> sampleTags = [
+  {'id': 1, 'name': 'なぜ', 'usedAt': ''},
+  {'id': 2, 'name': 'なんのために', 'usedAt': ''},
+  {'id': 3, 'name': 'いつ', 'usedAt': ''},
+  {'id': 4, 'name': '何を', 'usedAt': ''},
+  {'id': 5, 'name': 'どこで', 'usedAt': ''},
+  {'id': 6, 'name': 'どのように', 'usedAt': ''},
+];
 
 class MemoScreen extends HookWidget {
   MemoScreen({
@@ -89,13 +98,13 @@ class MemoScreen extends HookWidget {
                         return memoListContent(
                             context: context,
                             isLastItem: true,
-                            contentText: sampleItem[index]['text'],
+                            content: sampleItem[index],
                             title: '$title');
                       } else {
                         return memoListContent(
                             context: context,
                             isLastItem: false,
-                            contentText: sampleItem[index]['text'],
+                            content: sampleItem[index],
                             title: '$title');
                       }
                     },

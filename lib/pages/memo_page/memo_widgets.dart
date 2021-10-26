@@ -183,7 +183,7 @@ Widget memoListSpace(BuildContext context) {
 Widget memoListContent({
   required BuildContext context,
   required bool isLastItem,
-  required String contentText,
+  required Map<String, dynamic> content,
   required String title
 }) {
   return Container(
@@ -253,12 +253,12 @@ Widget memoListContent({
                   onTap: () {
                     toMemoScreen(
                         context: context,
-                        title: contentText,
+                        title: content['text'],
                         isFirstPage: false,
                         prePageTitle: title);
                   },
                   child: Container(
-                    padding: const EdgeInsets.only(left: 20, right: 5, top: 8, bottom: 8),
+                    padding: const EdgeInsets.only(left: 11, right: 5, top: 8, bottom: 8),
                     decoration: BoxDecoration(
                       color: Theme.of(context).cardTheme.color,
                       borderRadius: BorderRadius.circular(5),
@@ -271,24 +271,53 @@ Widget memoListContent({
                         )
                       ]
                     ),
-                    child: Row(
+                    child: Column(
                       children: [
-                        Expanded(
-                          child: Text(
-                            '$contentText',
-                            style: TextStyle(
-                              fontSize: 16
+                        content['tag_id'] != null?
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            padding: const EdgeInsets.only(top: 5),
+                            child: Container(
+                              padding: const EdgeInsets.only(left: 10, right: 10, top: 2, bottom: 2),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Color(0xFF5AC4CB),
+                                //todo: テーマで管理できるように色をメソッドで管理する
+                              ),
+                              child: Text(
+                                //todo: content['tag_id']をつかってタグの名前に変更する
+                                'なぜ',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
-                            //todo: 最大サイズを決めて文字数が多く、それ以上大きくなる場合には「もっと見る」を設ける
+                          )
+                        : Container(),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 3),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  '${content['text']}',
+                                  style: TextStyle(
+                                    fontSize: 16
+                                  ),
+                                  //todo: 最大サイズを決めて文字数が多く、それ以上大きくなる場合には「もっと見る」を設ける
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Icon(
+                                  CupertinoIcons.chat_bubble_2,
+                                  color: Colors.grey[400],
+                                ),
+                              )
+                            ],
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Icon(
-                            CupertinoIcons.chat_bubble_2,
-                            color: Colors.grey[400],
-                          ),
-                        )
                       ],
                     ),
                   ),
