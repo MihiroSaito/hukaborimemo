@@ -6,6 +6,7 @@ class ThemeClass {
 
   static ThemeData light() {
     return ThemeData(
+      //todo: primarySwatchをテーマによって違う色にする
       primarySwatch: ThemeClass.hukaborimemoColor,
       brightness: Brightness.light,
       scaffoldBackgroundColor: Color(0xFFF1F3F5),
@@ -28,6 +29,7 @@ class ThemeClass {
 
   static ThemeData dark() {
     return ThemeData(
+      //todo: primarySwatchをテーマによって違う色にする
       primarySwatch: ThemeClass.hukaborimemoColor,
       brightness: Brightness.dark,
       scaffoldBackgroundColor: Color(0xFF1A1A1A),

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -96,7 +97,9 @@ Widget searchBar(BuildContext context) {
       ),
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: Platform.isIOS
+            ? const EdgeInsets.all(8.0)
+            : const EdgeInsets.all(10.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

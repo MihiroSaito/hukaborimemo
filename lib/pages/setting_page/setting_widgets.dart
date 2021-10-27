@@ -5,7 +5,7 @@ import 'package:hukaborimemo/setting/setting_menus.dart';
 
 PreferredSizeWidget settingAppBar(BuildContext context) {
   return PreferredSize(
-    preferredSize: Size.fromHeight(50.0),
+    preferredSize: Size.fromHeight(55.0),
     child: AppBar(
       backgroundColor: Theme.of(context).cardTheme.color,
       shadowColor: Colors.black.withOpacity(0.2),

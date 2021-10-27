@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -95,7 +97,9 @@ Widget memoTitleArea({
               width: double.infinity,
               alignment: Alignment.centerLeft,
               child: Container(
-                padding: const EdgeInsets.only(left: 13, right: 13, top: 2, bottom: 2),
+                padding: Platform.isIOS
+                    ? const EdgeInsets.only(left: 13, right: 13, top: 2, bottom: 2)
+                    : const EdgeInsets.only(left: 13, right: 13, top: 3, bottom: 4),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   color: Theme.of(context).bottomAppBarColor
@@ -278,7 +282,9 @@ Widget memoListContent({
                             alignment: Alignment.centerLeft,
                             padding: const EdgeInsets.only(top: 5),
                             child: Container(
-                              padding: const EdgeInsets.only(left: 10, right: 10, top: 2, bottom: 2),
+                              padding: Platform.isIOS
+                                  ? const EdgeInsets.only(left: 10, right: 10, top: 2, bottom: 2)
+                                  : const EdgeInsets.only(left: 10, right: 10, top: 3, bottom: 4),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
                                 color: Color(0xFF5AC4CB),
