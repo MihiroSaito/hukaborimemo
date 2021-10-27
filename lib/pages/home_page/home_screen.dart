@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hukaborimemo/pages/home_page/home_viewmodel.dart';
 import 'package:hukaborimemo/pages/home_page/home_widgets.dart';
 
 //todo: 本物のデータに変える
@@ -29,6 +30,7 @@ class HomeScreen extends HookWidget {
     final windowSize = MediaQuery.of(context).size;
     final ScrollController controller = useScrollController();
     final isDisplayedAppbar = useProvider(isDisplayedAppbarProvider);
+    final memoDataProvider = useProvider(queryMemoDataHomeProvider);
 
     useEffect(() {
       controller.addListener(() {
@@ -68,22 +70,9 @@ class HomeScreen extends HookWidget {
                     height: 30,
                   ),
                 ),
-                SliverGrid(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    mainAxisSpacing: 10.0,
-                    crossAxisSpacing: 10.0,
-                    crossAxisCount: 3,
-                    childAspectRatio: 0.8
-                  ),
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index){
-                      return gridContent(
-                          context: context,
-                          memoTitle: sampleItem[index]['text']);
-                    },
-                    childCount: sampleItem.length,
-                  ),
-                ),
+                contentsArea(
+                    context: context,
+                    memoDataProvider: memoDataProvider),
                 SliverToBoxAdapter(
                   child: SizedBox(
                     height: 60,
@@ -108,8 +97,13 @@ class HomeScreen extends HookWidget {
             child: homeBottomBar(
                 context: context,
                 safeAreaPaddingBottom: safeAreaPadding.bottom,
-                windowSize: windowSize),
-          )
+                windowSize: windowSize,
+                memoDataProvider: memoDataProvider),
+          ),
+          widgetWhenThereIsNoMemo(
+              context: context,
+              windowSize: windowSize, 
+              memoDataProvider: memoDataProvider)
         ],
       ),
     );

@@ -1,7 +1,7 @@
 class MemoTable {
   final int? id;
   final int parentId;
-  final String text;
+  final String? text;
   final int? tagId;
   final String? createdAt;
   final String updateAt;

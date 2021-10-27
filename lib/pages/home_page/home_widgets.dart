@@ -124,6 +124,34 @@ Widget searchBar(BuildContext context) {
   );
 }
 
+Widget contentsArea({
+  required BuildContext context,
+  required AsyncValue<List<Map<String, dynamic>>> memoDataProvider,
+}) {
+  return memoDataProvider.when(
+      loading: () => SliverToBoxAdapter(),
+      error: (e, s) => SliverToBoxAdapter(),
+      data: (data) {
+        return SliverGrid(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              mainAxisSpacing: 10.0,
+              crossAxisSpacing: 10.0,
+              crossAxisCount: 3,
+              childAspectRatio: 0.8
+          ),
+          delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index){
+              return gridContent(
+                  context: context,
+                  memoTitle: data[index]['text']);
+            },
+            childCount: data.length,
+          ),
+        );
+      }
+  );
+}
+
 Widget gridContent({
   required BuildContext context,
   required String memoTitle,
@@ -202,6 +230,7 @@ Widget homeBottomBar({
   required BuildContext context,
   required double safeAreaPaddingBottom,
   required Size windowSize,
+  required AsyncValue<List<Map<String, dynamic>>> memoDataProvider
 }) {
   return Stack(
     children: [
@@ -231,13 +260,34 @@ Widget homeBottomBar({
               Spacer(),
               Padding(
                 padding: EdgeInsets.only(bottom: safeAreaPaddingBottom),
-                child: Text(
-                  '30件',
-                  //todo: メモの数を表示する
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Theme.of(context).textTheme.headline5!.color
-                  ),
+                child: memoDataProvider.when(
+                  loading: () {
+                    return Text(
+                      '件',
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).textTheme.headline5!.color
+                      ),
+                    );
+                  },
+                  error: (e, s) {
+                    return Text(
+                      '件',
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).textTheme.headline5!.color
+                      ),
+                    );
+                  },
+                  data: (data) {
+                    return Text(
+                      '${data.length}件',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Theme.of(context).textTheme.headline5!.color
+                      ),
+                    );
+                  }
                 ),
               )
             ],
@@ -255,6 +305,11 @@ Widget homeBottomBar({
                 //todo: メモページへ移動する
                 //todo: ボタンを押した時のへフェクトを追加する。（グラデーションのためInkWellは使えないと思われる）
                 debugPrint('メモを新規作成し、移動');
+                // toMemoScreen(
+                //     context: context,
+                //     title: '',
+                //     isFirstPage: true,
+                //     prePageTitle: null);
               },
               child: Container(
                 width: windowSize.width * 0.5,
@@ -390,5 +445,36 @@ Widget homeOptionDialogWidget(BuildContext context) {
         ),
       ),
     ),
+  );
+}
+
+Widget widgetWhenThereIsNoMemo({
+  required BuildContext context,
+  required Size windowSize,
+  required AsyncValue<List<Map<String, dynamic>>> memoDataProvider
+}) {
+  return memoDataProvider.when(
+      loading: () => Container(),
+      error: (e, s) => Container(),
+      data: (data) {
+        if (data.length == 0) {
+          return Align(
+            child: Container(
+              width: windowSize.width * 0.7,
+              child: Text(
+                'メモが１つもありません。\n＋ボタンから新しくメモを作成しよう！',
+                style: TextStyle(
+                    fontSize: 18,
+                    color: Theme.of(context).textTheme.headline6!.color,
+                    height: 1.7
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+        } else {
+          return Container();
+        }
+      }
   );
 }
