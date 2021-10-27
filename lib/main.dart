@@ -4,7 +4,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hukaborimemo/setting/theme.dart';
 import 'package:hukaborimemo/pages/home_page/home_screen.dart';
 
-void main() {
+import 'common/model/database/db_provider.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await DBProvider.db.database;
   runApp(
       ProviderScope(
           child: MyApp()
