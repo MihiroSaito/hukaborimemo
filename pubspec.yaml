@@ -48,7 +48,9 @@ flutter_icons:
 
 flutter_native_splash:
   image: "assets/images/hukaborimemo-splash.png"
+  image_dark: "assets/images/hukaborimemo-splash-dark.png"
   color: "FFFFFF"
+  color_dark: "1A1A1A"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
