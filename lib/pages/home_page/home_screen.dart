@@ -102,7 +102,7 @@ class HomeScreen extends HookWidget {
           ),
           widgetWhenThereIsNoMemo(
               context: context,
-              windowSize: windowSize, 
+              windowSize: windowSize,
               memoDataProvider: memoDataProvider)
         ],
       ),

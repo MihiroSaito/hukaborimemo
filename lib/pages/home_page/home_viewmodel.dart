@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hukaborimemo/common/model/database/db_provider.dart';
 import 'package:hukaborimemo/common/model/database/tables.dart';
+import 'package:hukaborimemo/route/route.dart';
 import 'package:hukaborimemo/setting/prefs_keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,17 +18,25 @@ void showHomeOptionDialog(BuildContext context) {
   );
 }
 
-Future<void> createNewMemo() async {
+Future<void> createNewMemo(BuildContext context) async {
   final now = DateTime.now().toString();
   final MemoTable memoTable = MemoTable(
       id: null,
       parentId: 0,
-      text: 'null',
+      text: '新規メモ',
       tagId: null,
       createdAt: now,
       updateAt: now);
-  final int id = await DBProvider.db.insertMemoData(memoTable);
-  //todo: home画面をrefreshして新しいmemoを反映させ、今作成したmemoへ移動する
+  final int memoId = await DBProvider.db.insertMemoData(memoTable);
+  toMemoScreen(
+      context: context,
+      memoId: memoId,
+      parentId: 0,
+      title: '',
+      tagId: null,
+      isFirstPage: true,
+      prePageTitle: null,
+      isNewOne: true);
 }
 
 final queryMemoDataHomeProvider =
@@ -57,9 +66,9 @@ final queryMemoDataHomeProvider =
           break;
         default: // 編集が加えられた
           memoData.sort((a, b){
-            return a[MemoTable.memoCreatedAt]
+            return b[MemoTable.memoCreatedAt]
                 .toString()
-                .compareTo(b[MemoTable.memoCreatedAt].toString());
+                .compareTo(a[MemoTable.memoCreatedAt].toString());
           });
           break;
       }

@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hukaborimemo/common/model/database/tables.dart';
+import 'package:hukaborimemo/pages/memo_page/memo_viewmodel.dart';
 import 'package:hukaborimemo/route/route.dart';
 
 Widget memoAppBar({
@@ -71,9 +73,15 @@ Widget memoAppBar({
 
 Widget memoTitleArea({
   required BuildContext context,
+  required int memoId,
+  required int parentId,
   required String title,
-  required bool isFirstPage
+  required int? tagId,
+  required bool isFirstPage,
+  required bool isNewOne,
+  required TextEditingController textEditingController
 }) {
+
   return Container(
     width: double.infinity,
     decoration: BoxDecoration(
@@ -118,13 +126,33 @@ Widget memoTitleArea({
         //todo: タグがあった場合にはタグを表示する
         Padding(
           padding: EdgeInsets.only(left: 5, right: 5),
-          //todo: TextをTextFieldに変更する
-          child: Text(
-            '$title',
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 17
+          child: TextField(
+            controller: textEditingController,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.only(top: 10, bottom: 10),
+              isDense: true,
             ),
+            autofocus: isNewOne? true :false,
+            style: TextStyle(
+                fontSize: 17
+            ),
+            textInputAction: TextInputAction.done,
+            //todo: submittedではなくて、onChangedでもいいかもしれない。
+            // onChanged: (text){
+            //   if(text.length >= 1){
+            //     active.state = true;
+            //   } else {
+            //     active.state = false;
+            //   }
+            // },
+            onSubmitted: (text) async {
+              updateTitle(
+                  memoId: memoId,
+                  title: text,
+                  parentId: parentId,
+                  tagId: tagId);
+            },
           ),
         ),
       ],
@@ -257,9 +285,13 @@ Widget memoListContent({
                   onTap: () {
                     toMemoScreen(
                         context: context,
-                        title: content['text'],
+                        memoId: content[MemoTable.memoId],
+                        parentId: content[MemoTable.memoParentId],
+                        title: content[MemoTable.memoText],
+                        tagId: content[MemoTable.memoTagId],
                         isFirstPage: false,
-                        prePageTitle: title);
+                        prePageTitle: title,
+                        isNewOne: false);
                   },
                   child: Container(
                     padding: const EdgeInsets.only(left: 11, right: 5, top: 8, bottom: 8),

@@ -31,12 +31,20 @@ const List<Map<String, dynamic>> sampleTags = [
 class MemoScreen extends HookWidget {
   MemoScreen({
     Key? key,
+    required this.memoId,
+    required this.parentId,
     required this.title,
+    required this.tagId,
     required this.isFirstPage,
-    required this.prePageTitle}) : super(key: key);
+    required this.prePageTitle,
+    required this.isNewOne}) : super(key: key);
+  final int memoId;
+  final int parentId;
   final String title;
+  final int? tagId;
   final bool isFirstPage;
   final String? prePageTitle;
+  final bool isNewOne;
 
   final isDisplayedAppbarProvider = StateProvider((ref) => false);
 
@@ -47,6 +55,7 @@ class MemoScreen extends HookWidget {
     final windowSize = MediaQuery.of(context).size;
     final ScrollController controller = useScrollController();
     final isDisplayedAppbar = useProvider(isDisplayedAppbarProvider);
+    final TextEditingController textEditingController = useTextEditingController(text: title);
 
     useEffect(() {
       controller.addListener(() {
@@ -78,8 +87,13 @@ class MemoScreen extends HookWidget {
               SliverToBoxAdapter(
                 child: memoTitleArea(
                     context: context,
+                    memoId: memoId,
+                    parentId: parentId,
                     title: title,
-                    isFirstPage: isFirstPage)
+                    tagId: tagId,
+                    isFirstPage: isFirstPage,
+                    isNewOne: isNewOne,
+                    textEditingController: textEditingController)
               ),
               SliverPadding(
                 padding: const EdgeInsets.only(left: 10, right: 15),
@@ -89,6 +103,8 @@ class MemoScreen extends HookWidget {
                         : Container()
                 ),
               ),
+
+              //todo: sampleItemをリアルなデータに変える
               SliverPadding(
                 padding: const EdgeInsets.only(left: 10, right: 15),
                 sliver: SliverList(

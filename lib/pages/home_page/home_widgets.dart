@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hukaborimemo/common/model/database/tables.dart';
 import 'package:hukaborimemo/pages/home_page/home_viewmodel.dart';
 import 'package:hukaborimemo/route/route.dart';
 
@@ -143,7 +144,10 @@ Widget contentsArea({
                 (BuildContext context, int index){
               return gridContent(
                   context: context,
-                  memoTitle: data[index]['text']);
+                  memoId: data[index][MemoTable.memoId],
+                  parentId: data[index][MemoTable.memoParentId],
+                  memoTitle: data[index][MemoTable.memoText],
+                  tagId: data[index][MemoTable.memoTagId]);
             },
             childCount: data.length,
           ),
@@ -154,7 +158,10 @@ Widget contentsArea({
 
 Widget gridContent({
   required BuildContext context,
+  required int memoId,
+  required int parentId,
   required String memoTitle,
+  required int? tagId
 }) {
   return Padding(
     padding: const EdgeInsets.all(3),
@@ -167,9 +174,13 @@ Widget gridContent({
               onTap: (){
                 toMemoScreen(
                     context: context,
+                    memoId: memoId,
+                    parentId: parentId,
                     title: memoTitle,
+                    tagId: tagId,
                     isFirstPage: true,
-                    prePageTitle: null);
+                    prePageTitle: null,
+                    isNewOne: false);
               },
               child: Container(
                 padding: const EdgeInsets.all(7),
@@ -301,15 +312,11 @@ Widget homeBottomBar({
         child: Container(
           child: Center(
             child: GestureDetector(
-              onTap: () {
+              onTap: () async {
                 //todo: メモページへ移動する
                 //todo: ボタンを押した時のへフェクトを追加する。（グラデーションのためInkWellは使えないと思われる）
                 debugPrint('メモを新規作成し、移動');
-                // toMemoScreen(
-                //     context: context,
-                //     title: '',
-                //     isFirstPage: true,
-                //     prePageTitle: null);
+                await createNewMemo(context);
               },
               child: Container(
                 width: windowSize.width * 0.5,

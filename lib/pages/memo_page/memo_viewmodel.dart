@@ -1,15 +1,21 @@
 import 'package:hukaborimemo/common/model/database/db_provider.dart';
 import 'package:hukaborimemo/common/model/database/tables.dart';
 
-Future<void> createNewMemo() async {
+Future<void> updateTitle({
+  required int memoId,
+  required String title,
+  required int parentId,
+  required int? tagId
+}) async {
+  //todo: titleが空だった時のバリデーションを追加する
   final now = DateTime.now().toString();
   final MemoTable memoTable = MemoTable(
-      id: null,
-      parentId: 0,
-      text: null,
-      tagId: null,
-      createdAt: now,
+      id: memoId,
+      parentId: parentId,
+      text: title,
+      tagId: tagId,
+      createdAt: null,
       updateAt: now);
-  final int id = await DBProvider.db.insertMemoData(memoTable);
+  final int id = await DBProvider.db.updateMemoData(memoTable);
   //todo: home画面をrefreshして新しいmemoを反映させ、今作成したmemoへ移動する
 }
