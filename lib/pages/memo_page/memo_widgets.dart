@@ -138,20 +138,13 @@ Widget memoTitleArea({
                 fontSize: 17
             ),
             textInputAction: TextInputAction.done,
-            //todo: submittedではなくて、onChangedでもいいかもしれない。
-            // onChanged: (text){
-            //   if(text.length >= 1){
-            //     active.state = true;
-            //   } else {
-            //     active.state = false;
-            //   }
-            // },
-            onSubmitted: (text) async {
+            onChanged: (text){
               updateTitle(
-                  memoId: memoId,
-                  title: text,
-                  parentId: parentId,
-                  tagId: tagId);
+                context: context,
+                memoId: memoId,
+                title: text,
+                parentId: parentId,
+                tagId: tagId);
             },
           ),
         ),
@@ -369,30 +362,38 @@ Widget memoListContent({
   );
 }
 
-Widget addItemButton() {
-  return Container(
-    height: 60,
-    width: 60,
-    decoration: BoxDecoration(
-      shape: BoxShape.circle,
-      gradient: LinearGradient(
-          colors: [Color(0xFF5EBADD), Color(0xFF50D6A9)],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight
+Widget addItemButton({
+  required BuildContext context,
+  required int memoId
+}) {
+  return GestureDetector(
+    onTap: () async {
+      await addNewMemo(context: context, memoId: memoId);
+    },
+    child: Container(
+      height: 60,
+      width: 60,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: LinearGradient(
+            colors: [Color(0xFF5EBADD), Color(0xFF50D6A9)],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Color(0xFF5EBADD).withOpacity(0.3),
+            spreadRadius: 1,
+            blurRadius: 10,
+            offset: Offset(0, 0),
+          )
+        ]
       ),
-      boxShadow: [
-        BoxShadow(
-          color: Color(0xFF5EBADD).withOpacity(0.3),
-          spreadRadius: 1,
-          blurRadius: 10,
-          offset: Offset(0, 0),
-        )
-      ]
-    ),
-    child: Icon(
-      CupertinoIcons.add,
-      color: Colors.white,
-      size: 23,
+      child: Icon(
+        CupertinoIcons.add,
+        color: Colors.white,
+        size: 23,
+      ),
     ),
   );
 }

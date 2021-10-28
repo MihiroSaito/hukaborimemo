@@ -23,7 +23,7 @@ Future<void> createNewMemo(BuildContext context) async {
   final MemoTable memoTable = MemoTable(
       id: null,
       parentId: 0,
-      text: '新規メモ',
+      text: '無題メモ',
       tagId: null,
       createdAt: now,
       updateAt: now);
@@ -37,6 +37,7 @@ Future<void> createNewMemo(BuildContext context) async {
       isFirstPage: true,
       prePageTitle: null,
       isNewOne: true);
+  context.refresh(queryMemoDataHomeProvider);
 }
 
 final queryMemoDataHomeProvider =

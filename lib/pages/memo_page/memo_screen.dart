@@ -6,20 +6,6 @@ import 'package:hukaborimemo/pages/memo_page/memo_viewmodel.dart';
 import 'memo_widgets.dart';
 
 //todo: 本物のデータに変える
-// const List<Map<String, dynamic>> sampleItem = [
-//   {'id': 30, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': 1},
-//   {'id': 31, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
-//   {'id': 32, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
-//   {'id': 33, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
-//   {'id': 34, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
-//   {'id': 35, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
-//   {'id': 36, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
-//   {'id': 37, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
-//   {'id': 38, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
-//   {'id': 39, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
-//   {'id': 40, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
-//   {'id': 41, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},];
-
 const List<Map<String, dynamic>> sampleTags = [
   {'id': 1, 'name': 'なぜ', 'usedAt': ''},
   {'id': 2, 'name': 'なんのために', 'usedAt': ''},
@@ -143,7 +129,10 @@ class MemoScreen extends HookWidget {
               SliverPadding(
                 padding: const EdgeInsets.only(top: 25),
                 sliver: SliverToBoxAdapter(
-                    child: addItemButton()
+                    child: addItemButton(
+                      context: context,
+                      memoId: memoId
+                    )
                 ),
               ),
               SliverToBoxAdapter(

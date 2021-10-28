@@ -1,14 +1,19 @@
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hukaborimemo/common/model/database/db_provider.dart';
 import 'package:hukaborimemo/common/model/database/tables.dart';
+import 'package:hukaborimemo/pages/home_page/home_viewmodel.dart';
 
 Future<void> updateTitle({
+  required BuildContext context,
   required int memoId,
   required String title,
   required int parentId,
   required int? tagId
 }) async {
-  //todo: titleが空だった時のバリデーションを追加する
+  if(title == ''){
+    title = '無題メモ';
+  }
   final now = DateTime.now().toString();
   final MemoTable memoTable = MemoTable(
       id: memoId,
@@ -18,7 +23,7 @@ Future<void> updateTitle({
       createdAt: null,
       updateAt: now);
   final int id = await DBProvider.db.updateMemoData(memoTable);
-  //todo: home画面をrefreshして新しいmemoを反映させ、今作成したmemoへ移動する
+  context.refresh(queryMemoDataHomeProvider);
 }
 
 final queryMemoDataMemoProvider =
@@ -28,3 +33,18 @@ final queryMemoDataMemoProvider =
   }
 );
 
+Future<void> addNewMemo({
+  required BuildContext context,
+  required int memoId
+}) async {
+  final now = DateTime.now().toString();
+  final MemoTable memoTable = MemoTable(
+      id: null,
+      parentId: memoId,
+      text: '無題メモ',
+      tagId: null,
+      createdAt: now,
+      updateAt: now);
+  await DBProvider.db.insertMemoData(memoTable);
+  context.refresh(queryMemoDataMemoProvider(memoId));
+}
