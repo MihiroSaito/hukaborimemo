@@ -24,6 +24,7 @@ Future<void> updateTitle({
       updateAt: now);
   final int id = await DBProvider.db.updateMemoData(memoTable);
   context.refresh(queryMemoDataHomeProvider);
+  context.refresh(queryMemoDataMemoProvider(parentId));
 }
 
 final queryMemoDataMemoProvider =

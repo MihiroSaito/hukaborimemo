@@ -34,6 +34,7 @@ class MemoScreen extends HookWidget {
   final bool isNewOne;
 
   final isDisplayedAppbarProvider = StateProvider((ref) => false);
+  final titleStateProvider = StateProvider((ref) => '');
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +45,7 @@ class MemoScreen extends HookWidget {
     final isDisplayedAppbar = useProvider(isDisplayedAppbarProvider);
     final TextEditingController textEditingController = useTextEditingController(text: title);
     final memoDataProvider = useProvider(queryMemoDataMemoProvider(memoId));
+    final titleState = useProvider(titleStateProvider);
 
     useEffect(() {
       controller.addListener(() {
@@ -54,6 +56,10 @@ class MemoScreen extends HookWidget {
           isDisplayedAppbar.state = false;
         }
       });
+      WidgetsBinding.instance!.addPostFrameCallback((_){
+        titleState.state = title;
+      });
+
       return (){
         // controller.dispose();
       };
@@ -77,7 +83,7 @@ class MemoScreen extends HookWidget {
                     context: context,
                     memoId: memoId,
                     parentId: parentId,
-                    title: title,
+                    titleState: titleState,
                     tagId: tagId,
                     isFirstPage: isFirstPage,
                     isNewOne: isNewOne,
@@ -111,13 +117,13 @@ class MemoScreen extends HookWidget {
                                   context: context,
                                   isLastItem: true,
                                   content: data[index],
-                                  title: '$title');
+                                  titleState: titleState);
                             } else {
                               return memoListContent(
                                   context: context,
                                   isLastItem: false,
                                   content: data[index],
-                                  title: '$title');
+                                  titleState: titleState);
                             }
                           },
                           childCount: data.length

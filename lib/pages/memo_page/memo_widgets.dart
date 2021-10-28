@@ -75,7 +75,7 @@ Widget memoTitleArea({
   required BuildContext context,
   required int memoId,
   required int parentId,
-  required String title,
+  required StateController<String> titleState,
   required int? tagId,
   required bool isFirstPage,
   required bool isNewOne,
@@ -137,8 +137,10 @@ Widget memoTitleArea({
             style: TextStyle(
                 fontSize: 17
             ),
+            maxLines: null,
             textInputAction: TextInputAction.done,
             onChanged: (text){
+              titleState.state = text;
               updateTitle(
                 context: context,
                 memoId: memoId,
@@ -209,7 +211,7 @@ Widget memoListContent({
   required BuildContext context,
   required bool isLastItem,
   required Map<String, dynamic> content,
-  required String title
+  required StateController<String> titleState
 }) {
   return Container(
     child: Column(
@@ -283,7 +285,7 @@ Widget memoListContent({
                         title: content[MemoTable.memoText],
                         tagId: content[MemoTable.memoTagId],
                         isFirstPage: false,
-                        prePageTitle: title,
+                        prePageTitle: titleState.state,
                         isNewOne: false);
                   },
                   child: Container(
