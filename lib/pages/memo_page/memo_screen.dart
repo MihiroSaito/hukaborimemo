@@ -68,103 +68,115 @@ class MemoScreen extends HookWidget {
     }, const []);
 
     return Scaffold(
-      body: Stack(
-        children: [
-          CustomScrollView(
-            controller: controller,
-            // physics: scrollPhysics.state,
-            physics: ClampingScrollPhysics(),
-            slivers: [
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  height: safeAreaPadding.top + 60,
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Stack(
+          children: [
+            CustomScrollView(
+              controller: controller,
+              // physics: scrollPhysics.state,
+              physics: ClampingScrollPhysics(),
+              slivers: [
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: safeAreaPadding.top + 60,
+                  ),
                 ),
-              ),
-              SliverToBoxAdapter(
-                child: memoTitleArea(
-                    context: context,
-                    memoId: memoId,
-                    parentId: parentId,
-                    titleState: titleState,
-                    tagId: tagId,
-                    isFirstPage: isFirstPage,
-                    isNewOne: isNewOne,
-                    textEditingController: textEditingController)
-              ),
-              memoDataProvider.when(
-                loading: () => SliverToBoxAdapter(),
-                error: (e, s) => SliverToBoxAdapter(),
-                data: (data) {
-                  return SliverPadding(
-                    padding: const EdgeInsets.only(left: 10, right: 15),
-                    sliver: SliverToBoxAdapter(
-                        child: data.length != 0
-                            ? memoListSpaceFirst(context)
-                            : Container()
-                    ),
-                  );
-                }
-              ),
-              memoDataProvider.when(
-                loading: () => SliverToBoxAdapter(),
-                error: (e, s) => SliverToBoxAdapter(),
-                data: (data) {
-                  return SliverPadding(
-                    padding: const EdgeInsets.only(left: 10, right: 15),
-                    sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                              (BuildContext context, int index) {
-                                textEditingControllersForMemo.add(TextEditingController(text: data[index][MemoTable.memoText]));
-                            if(index == data.length - 1){
-                              return memoListContent(
-                                  context: context,
-                                  isLastItem: true,
-                                  content: data[index],
-                                  titleState: titleState,
-                                  textEditingControllerForMemo: textEditingControllersForMemo[index]);
-                            } else {
-                              return memoListContent(
-                                  context: context,
-                                  isLastItem: false,
-                                  content: data[index],
-                                  titleState: titleState,
-                                  textEditingControllerForMemo: textEditingControllersForMemo[index]);
-                            }
-                          },
-                          childCount: data.length
-                      ),
-                    ),
-                  );
-                }
-              ),
-              SliverPadding(
-                padding: const EdgeInsets.only(top: 25),
-                sliver: SliverToBoxAdapter(
-                    child: addItemButton(
+                SliverToBoxAdapter(
+                  child: memoTitleArea(
                       context: context,
-                      memoId: memoId
-                    )
+                      memoId: memoId,
+                      parentId: parentId,
+                      titleState: titleState,
+                      tagId: tagId,
+                      isFirstPage: isFirstPage,
+                      isNewOne: isNewOne,
+                      textEditingController: textEditingController)
                 ),
-              ),
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  height: 100,
+                memoDataProvider.when(
+                  loading: () => SliverToBoxAdapter(),
+                  error: (e, s) => SliverToBoxAdapter(),
+                  data: (data) {
+                    return SliverPadding(
+                      padding: const EdgeInsets.only(left: 10, right: 15),
+                      sliver: SliverToBoxAdapter(
+                          child: data.length != 0
+                              ? memoListSpaceFirst(context)
+                              : Container()
+                      ),
+                    );
+                  }
                 ),
-              ),
-            ],
-          ),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: memoAppBar(
-                context: context,
-                safeAreaPaddingTop: safeAreaPadding.top,
-                isDisplayedAppbar: isDisplayedAppbar,
-                isFirstPage: isFirstPage,
-                prePageTitle: prePageTitle),
-          ),
-        ],
+                memoDataProvider.when(
+                  loading: () => SliverToBoxAdapter(),
+                  error: (e, s) => SliverToBoxAdapter(),
+                  data: (data) {
+                    return SliverPadding(
+                      padding: EdgeInsets.only(left: 10, right: 15),
+                      sliver: SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                                (BuildContext context, int index) {
+                                  textEditingControllersForMemo.add(TextEditingController(text: data[index][MemoTable.memoText]));
+                              if(index == data.length - 1){
+                                return memoListContent(
+                                    context: context,
+                                    isLastItem: true,
+                                    content: data[index],
+                                    titleState: titleState,
+                                    textEditingControllerForMemo: textEditingControllersForMemo[index]);
+                              } else {
+                                return memoListContent(
+                                    context: context,
+                                    isLastItem: false,
+                                    content: data[index],
+                                    titleState: titleState,
+                                    textEditingControllerForMemo: textEditingControllersForMemo[index]);
+                              }
+                            },
+                            childCount: data.length
+                        ),
+                      ),
+                    );
+                  }
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.only(top: 25),
+                  sliver: SliverToBoxAdapter(
+                      child: addItemButton(
+                        context: context,
+                        memoId: memoId
+                      )
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 100,
+                  ),
+                ),
+              ],
+            ),
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: memoAppBar(
+                  context: context,
+                  safeAreaPaddingTop: safeAreaPadding.top,
+                  isDisplayedAppbar: isDisplayedAppbar,
+                  isFirstPage: isFirstPage,
+                  prePageTitle: prePageTitle),
+            ),
+            // Positioned(
+            //   bottom: 0,
+            //   left: 0,
+            //   right: 0,
+            //   child: Container(
+            //     height: 50,
+            //     color: Colors.red,
+            //   ),
+            // ),
+          ],
+        ),
       ),
     );
   }
