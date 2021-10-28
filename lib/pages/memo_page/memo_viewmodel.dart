@@ -1,3 +1,4 @@
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hukaborimemo/common/model/database/db_provider.dart';
 import 'package:hukaborimemo/common/model/database/tables.dart';
 
@@ -19,3 +20,11 @@ Future<void> updateTitle({
   final int id = await DBProvider.db.updateMemoData(memoTable);
   //todo: home画面をrefreshして新しいmemoを反映させ、今作成したmemoへ移動する
 }
+
+final queryMemoDataMemoProvider =
+  FutureProvider.autoDispose.family<List<Map<String, dynamic>>, int>((ref, memoId) async {
+    return await DBProvider.db
+        .queryMemoData(memoId);
+  }
+);
+

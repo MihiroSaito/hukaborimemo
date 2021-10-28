@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hukaborimemo/pages/memo_page/memo_viewmodel.dart';
 
 import 'memo_widgets.dart';
 
 //todo: 本物のデータに変える
-const List<Map<String, dynamic>> sampleItem = [
-  {'id': 30, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': 1},
-  {'id': 31, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
-  {'id': 32, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
-  {'id': 33, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
-  {'id': 34, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
-  {'id': 35, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
-  {'id': 36, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
-  {'id': 37, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
-  {'id': 38, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
-  {'id': 39, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
-  {'id': 40, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
-  {'id': 41, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},];
+// const List<Map<String, dynamic>> sampleItem = [
+//   {'id': 30, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': 1},
+//   {'id': 31, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
+//   {'id': 32, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
+//   {'id': 33, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
+//   {'id': 34, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
+//   {'id': 35, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
+//   {'id': 36, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
+//   {'id': 37, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
+//   {'id': 38, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
+//   {'id': 39, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
+//   {'id': 40, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},
+//   {'id': 41, 'parent_id': 1, 'text': '収入が少ないから（memo）', 'tag_id': null},];
 
 const List<Map<String, dynamic>> sampleTags = [
   {'id': 1, 'name': 'なぜ', 'usedAt': ''},
@@ -56,6 +57,7 @@ class MemoScreen extends HookWidget {
     final ScrollController controller = useScrollController();
     final isDisplayedAppbar = useProvider(isDisplayedAppbarProvider);
     final TextEditingController textEditingController = useTextEditingController(text: title);
+    final memoDataProvider = useProvider(queryMemoDataMemoProvider(memoId));
 
     useEffect(() {
       controller.addListener(() {
@@ -95,38 +97,48 @@ class MemoScreen extends HookWidget {
                     isNewOne: isNewOne,
                     textEditingController: textEditingController)
               ),
-              SliverPadding(
-                padding: const EdgeInsets.only(left: 10, right: 15),
-                sliver: SliverToBoxAdapter(
-                    child: sampleItem.length != 0
-                        ? memoListSpaceFirst(context)
-                        : Container()
-                ),
+              memoDataProvider.when(
+                loading: () => SliverToBoxAdapter(),
+                error: (e, s) => SliverToBoxAdapter(),
+                data: (data) {
+                  return SliverPadding(
+                    padding: const EdgeInsets.only(left: 10, right: 15),
+                    sliver: SliverToBoxAdapter(
+                        child: data.length != 0
+                            ? memoListSpaceFirst(context)
+                            : Container()
+                    ),
+                  );
+                }
               ),
-
-              //todo: sampleItemをリアルなデータに変える
-              SliverPadding(
-                padding: const EdgeInsets.only(left: 10, right: 15),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      if(index == sampleItem.length - 1){
-                        return memoListContent(
-                            context: context,
-                            isLastItem: true,
-                            content: sampleItem[index],
-                            title: '$title');
-                      } else {
-                        return memoListContent(
-                            context: context,
-                            isLastItem: false,
-                            content: sampleItem[index],
-                            title: '$title');
-                      }
-                    },
-                    childCount: sampleItem.length
-                  ),
-                ),
+              memoDataProvider.when(
+                loading: () => SliverToBoxAdapter(),
+                error: (e, s) => SliverToBoxAdapter(),
+                data: (data) {
+                  return SliverPadding(
+                    padding: const EdgeInsets.only(left: 10, right: 15),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                              (BuildContext context, int index) {
+                            if(index == data.length - 1){
+                              return memoListContent(
+                                  context: context,
+                                  isLastItem: true,
+                                  content: data[index],
+                                  title: '$title');
+                            } else {
+                              return memoListContent(
+                                  context: context,
+                                  isLastItem: false,
+                                  content: data[index],
+                                  title: '$title');
+                            }
+                          },
+                          childCount: data.length
+                      ),
+                    ),
+                  );
+                }
               ),
               SliverPadding(
                 padding: const EdgeInsets.only(top: 25),
