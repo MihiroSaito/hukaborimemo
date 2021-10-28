@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hukaborimemo/common/model/database/tables.dart';
 import 'package:hukaborimemo/pages/memo_page/memo_viewmodel.dart';
 
 import 'memo_widgets.dart';
@@ -35,6 +36,7 @@ class MemoScreen extends HookWidget {
 
   final isDisplayedAppbarProvider = StateProvider((ref) => false);
   final titleStateProvider = StateProvider((ref) => '');
+  final List<TextEditingController> textEditingControllersForMemo = [];
 
   @override
   Widget build(BuildContext context) {
@@ -112,18 +114,21 @@ class MemoScreen extends HookWidget {
                     sliver: SliverList(
                       delegate: SliverChildBuilderDelegate(
                               (BuildContext context, int index) {
+                                textEditingControllersForMemo.add(TextEditingController(text: data[index][MemoTable.memoText]));
                             if(index == data.length - 1){
                               return memoListContent(
                                   context: context,
                                   isLastItem: true,
                                   content: data[index],
-                                  titleState: titleState);
+                                  titleState: titleState,
+                                  textEditingControllerForMemo: textEditingControllersForMemo[index]);
                             } else {
                               return memoListContent(
                                   context: context,
                                   isLastItem: false,
                                   content: data[index],
-                                  titleState: titleState);
+                                  titleState: titleState,
+                                  textEditingControllerForMemo: textEditingControllersForMemo[index]);
                             }
                           },
                           childCount: data.length
