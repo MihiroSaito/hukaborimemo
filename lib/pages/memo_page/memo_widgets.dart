@@ -361,7 +361,8 @@ Widget memoListContent({
                                       tagId: content[MemoTable.memoTagId],
                                       isFirstPage: false,
                                       prePageTitle: titleState.state,
-                                      isNewOne: false);
+                                      isNewOne: false,
+                                      textEditingController: textEditingControllerForMemo);
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(8),

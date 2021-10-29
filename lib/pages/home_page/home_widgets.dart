@@ -180,7 +180,8 @@ Widget gridContent({
                     tagId: tagId,
                     isFirstPage: true,
                     prePageTitle: null,
-                    isNewOne: false);
+                    isNewOne: false,
+                    textEditingController: null);
               },
               child: Container(
                 padding: const EdgeInsets.all(7),

@@ -36,7 +36,8 @@ Future<void> createNewMemo(BuildContext context) async {
       tagId: null,
       isFirstPage: true,
       prePageTitle: null,
-      isNewOne: true);
+      isNewOne: true,
+      textEditingController: null);
   context.refresh(queryMemoDataHomeProvider);
 }
 

@@ -15,7 +15,8 @@ Future<void> toMemoScreen({
   required int? tagId,
   required bool isFirstPage,
   required String? prePageTitle,
-  required bool isNewOne
+  required bool isNewOne,
+  required TextEditingController? textEditingController
 }) async {
   Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => MemoScreen(
@@ -26,6 +27,7 @@ Future<void> toMemoScreen({
         isFirstPage: isFirstPage,
         prePageTitle: prePageTitle,
         isNewOne: isNewOne,
+        textEditingControllerForTitle: textEditingController,
       ))
   ).then((_){
     context.refresh(queryMemoDataHomeProvider);

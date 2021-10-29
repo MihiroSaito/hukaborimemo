@@ -25,7 +25,8 @@ class MemoScreen extends HookWidget {
     required this.tagId,
     required this.isFirstPage,
     required this.prePageTitle,
-    required this.isNewOne}) : super(key: key);
+    required this.isNewOne,
+    required this.textEditingControllerForTitle}) : super(key: key);
   final int memoId;
   final int parentId;
   final String title;
@@ -33,6 +34,7 @@ class MemoScreen extends HookWidget {
   final bool isFirstPage;
   final String? prePageTitle;
   final bool isNewOne;
+  final TextEditingController? textEditingControllerForTitle;
 
   final isDisplayedAppbarProvider = StateProvider((ref) => false);
   final titleStateProvider = StateProvider((ref) => '');
@@ -45,7 +47,9 @@ class MemoScreen extends HookWidget {
     final windowSize = MediaQuery.of(context).size;
     final ScrollController controller = useScrollController();
     final isDisplayedAppbar = useProvider(isDisplayedAppbarProvider);
-    final TextEditingController textEditingController = useTextEditingController(text: title);
+    final TextEditingController textEditingController = textEditingControllerForTitle != null
+        ? textEditingControllerForTitle!
+        : useTextEditingController(text: title);
     final memoDataProvider = useProvider(queryMemoDataMemoProvider(memoId));
     final titleState = useProvider(titleStateProvider);
 
