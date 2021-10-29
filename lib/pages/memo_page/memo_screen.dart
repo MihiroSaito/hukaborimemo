@@ -38,6 +38,7 @@ class MemoScreen extends HookWidget {
 
   final isDisplayedAppbarProvider = StateProvider((ref) => false);
   final titleStateProvider = StateProvider((ref) => '');
+  final newMemoIdStateProvider = StateProvider((ref) => 0);
   final List<TextEditingController> textEditingControllersForMemo = [];
 
   @override
@@ -52,6 +53,7 @@ class MemoScreen extends HookWidget {
         : useTextEditingController(text: title);
     final memoDataProvider = useProvider(queryMemoDataMemoProvider(memoId));
     final titleState = useProvider(titleStateProvider);
+    final newMemoIdState = useProvider(newMemoIdStateProvider);
 
     useEffect(() {
       controller.addListener(() {
@@ -67,7 +69,9 @@ class MemoScreen extends HookWidget {
       });
 
       return (){
-        // controller.dispose();
+        for (TextEditingController c in textEditingControllersForMemo) {
+          c.dispose();
+        }
       };
     }, const []);
 
@@ -127,14 +131,16 @@ class MemoScreen extends HookWidget {
                                     isLastItem: true,
                                     content: data[index],
                                     titleState: titleState,
-                                    textEditingControllerForMemo: textEditingControllersForMemo[index]);
+                                    textEditingControllerForMemo: textEditingControllersForMemo[index],
+                                    newMemoIdState: newMemoIdState);
                               } else {
                                 return memoListContent(
                                     context: context,
                                     isLastItem: false,
                                     content: data[index],
                                     titleState: titleState,
-                                    textEditingControllerForMemo: textEditingControllersForMemo[index]);
+                                    textEditingControllerForMemo: textEditingControllersForMemo[index],
+                                    newMemoIdState: newMemoIdState);
                               }
                             },
                             childCount: data.length
@@ -148,7 +154,8 @@ class MemoScreen extends HookWidget {
                   sliver: SliverToBoxAdapter(
                       child: addItemButton(
                         context: context,
-                        memoId: memoId
+                        memoId: memoId,
+                        newMemoIdState: newMemoIdState
                       )
                   ),
                 ),

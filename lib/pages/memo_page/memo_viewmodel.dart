@@ -33,16 +33,18 @@ final queryMemoDataMemoProvider =
 
 Future<void> addNewMemo({
   required BuildContext context,
-  required int memoId
+  required int memoId,
+  required StateController<int> newMemoIdState
 }) async {
   final now = DateTime.now().toString();
   final MemoTable memoTable = MemoTable(
       id: null,
       parentId: memoId,
-      text: '無題メモ',
+      text: '',
       tagId: null,
       createdAt: now,
       updateAt: now);
-  await DBProvider.db.insertMemoData(memoTable);
+  final newMemoId = await DBProvider.db.insertMemoData(memoTable);
+  newMemoIdState.state = newMemoId;
   context.refresh(queryMemoDataMemoProvider(memoId));
 }

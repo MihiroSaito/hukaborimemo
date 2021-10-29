@@ -212,7 +212,8 @@ Widget memoListContent({
   required bool isLastItem,
   required Map<String, dynamic> content,
   required StateController<String> titleState,
-  required TextEditingController textEditingControllerForMemo
+  required TextEditingController textEditingControllerForMemo,
+  required StateController<int> newMemoIdState
 }) {
   return Container(
     child: Column(
@@ -330,7 +331,7 @@ Widget memoListContent({
                                   contentPadding: EdgeInsets.only(top: 10, bottom: 10),
                                   isDense: true,
                                 ),
-                                autofocus: false,
+                                autofocus: content[MemoTable.memoId] == newMemoIdState.state? true : false,
                                 style: TextStyle(
                                     fontSize: 16
                                 ),
@@ -390,11 +391,16 @@ Widget memoListContent({
 
 Widget addItemButton({
   required BuildContext context,
-  required int memoId
+  required int memoId,
+  required StateController<int> newMemoIdState
 }) {
   return GestureDetector(
     onTap: () async {
-      await addNewMemo(context: context, memoId: memoId);
+      FocusScope.of(context).unfocus();
+      await addNewMemo(
+          context: context,
+          memoId: memoId,
+          newMemoIdState: newMemoIdState);
     },
     child: Container(
       height: 60,
