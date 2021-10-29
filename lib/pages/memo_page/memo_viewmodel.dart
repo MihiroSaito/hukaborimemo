@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hukaborimemo/common/model/database/db_provider.dart';
 import 'package:hukaborimemo/common/model/database/tables.dart';
-import 'package:hukaborimemo/pages/home_page/home_viewmodel.dart';
 
 Future<void> updateTitle({
   required BuildContext context,
@@ -23,8 +22,6 @@ Future<void> updateTitle({
       createdAt: null,
       updateAt: now);
   final int id = await DBProvider.db.updateMemoData(memoTable);
-  context.refresh(queryMemoDataHomeProvider);
-  context.refresh(queryMemoDataMemoProvider(parentId));
 }
 
 final queryMemoDataMemoProvider =

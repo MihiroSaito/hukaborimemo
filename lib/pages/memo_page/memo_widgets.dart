@@ -357,7 +357,7 @@ Widget memoListContent({
                                       context: context,
                                       memoId: content[MemoTable.memoId],
                                       parentId: content[MemoTable.memoParentId],
-                                      title: content[MemoTable.memoText],
+                                      title: textEditingControllerForMemo.text,
                                       tagId: content[MemoTable.memoTagId],
                                       isFirstPage: false,
                                       prePageTitle: titleState.state,
