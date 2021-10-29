@@ -147,7 +147,9 @@ Widget contentsArea({
                   memoId: data[index][MemoTable.memoId],
                   parentId: data[index][MemoTable.memoParentId],
                   memoTitle: data[index][MemoTable.memoText],
-                  tagId: data[index][MemoTable.memoTagId]);
+                  tagId: data[index][MemoTable.memoTagId],
+                  //todo: 並び順によってcreatedAtを使うのかupdatedAtを使うのか変える
+                  dateTime: data[index][MemoTable.memoUpdatedAt]);
             },
             childCount: data.length,
           ),
@@ -161,7 +163,8 @@ Widget gridContent({
   required int memoId,
   required int parentId,
   required String memoTitle,
-  required int? tagId
+  required int? tagId,
+  required String dateTime
 }) {
   return Padding(
     padding: const EdgeInsets.all(3),
@@ -221,7 +224,7 @@ Widget gridContent({
                   flex: 7,
                   child: FittedBox(
                     child: Text(
-                      '2020/10/16',
+                      '${getCreatedDate(dateTime)}',
                       style: TextStyle(
                         color: Theme.of(context).textTheme.headline6!.color,
                       ),

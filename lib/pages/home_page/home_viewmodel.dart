@@ -6,6 +6,8 @@ import 'package:hukaborimemo/common/model/database/tables.dart';
 import 'package:hukaborimemo/route/route.dart';
 import 'package:hukaborimemo/setting/prefs_keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/src/intl/date_format.dart';
 
 import 'home_widgets.dart';
 
@@ -77,3 +79,14 @@ final queryMemoDataHomeProvider =
       return memoData;
     }
 );
+
+
+String getCreatedDate(String dateTimeString) {
+  initializeDateFormatting("ja_JP");
+
+  DateTime datetime = DateTime.parse(dateTimeString); // StringからDate
+
+  var formatter = DateFormat('yyyy/MM/dd', "ja_JP");
+  var formatted = formatter.format(datetime); // DateからString
+  return formatted;
+}
