@@ -39,7 +39,9 @@ class MemoScreen extends HookWidget {
   final isDisplayedAppbarProvider = StateProvider((ref) => false);
   final titleStateProvider = StateProvider((ref) => '');
   final newMemoIdStateProvider = StateProvider((ref) => 0);
-  final List<TextEditingController> textEditingControllersForMemo = [];
+  final List<TextEditingController> textEditingControllerList = [];
+  final List<int> memoIdList = [];
+  final List<int> counter = [];
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +71,7 @@ class MemoScreen extends HookWidget {
       });
 
       return (){
-        for (TextEditingController c in textEditingControllersForMemo) {
+        for (TextEditingController c in textEditingControllerList) {
           c.dispose();
         }
       };
@@ -77,7 +79,9 @@ class MemoScreen extends HookWidget {
 
     return Scaffold(
       body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
         child: Stack(
           children: [
             CustomScrollView(
@@ -123,27 +127,30 @@ class MemoScreen extends HookWidget {
                       padding: EdgeInsets.only(left: 10, right: 15),
                       sliver: SliverList(
                         delegate: SliverChildBuilderDelegate(
-                                (BuildContext context, int index) {
-                                  textEditingControllersForMemo.add(TextEditingController(text: data[index][MemoTable.memoText]));
-                              if(index == data.length - 1){
-                                return memoListContent(
-                                    context: context,
-                                    isLastItem: true,
-                                    content: data[index],
-                                    titleState: titleState,
-                                    textEditingControllerForMemo: textEditingControllersForMemo[index],
-                                    newMemoIdState: newMemoIdState);
-                              } else {
-                                return memoListContent(
-                                    context: context,
-                                    isLastItem: false,
-                                    content: data[index],
-                                    titleState: titleState,
-                                    textEditingControllerForMemo: textEditingControllersForMemo[index],
-                                    newMemoIdState: newMemoIdState);
-                              }
-                            },
-                            childCount: data.length
+                          (BuildContext context, int index) {
+                            if (!memoIdList.contains(data[index][MemoTable.memoId])) {
+                              textEditingControllerList.add(TextEditingController(text: data[index][MemoTable.memoText]));
+                              memoIdList.add(data[index][MemoTable.memoId]);
+                            }
+                            if(index == data.length - 1){
+                              return memoListContent(
+                                  context: context,
+                                  isLastItem: true,
+                                  content: data[index],
+                                  titleState: titleState,
+                                  textEditingControllerForMemo: textEditingControllerList[index],
+                                  newMemoIdState: newMemoIdState);
+                            } else {
+                              return memoListContent(
+                                  context: context,
+                                  isLastItem: false,
+                                  content: data[index],
+                                  titleState: titleState,
+                                  textEditingControllerForMemo: textEditingControllerList[index],
+                                  newMemoIdState: newMemoIdState);
+                            }
+                          },
+                          childCount: data.length
                         ),
                       ),
                     );
@@ -155,7 +162,8 @@ class MemoScreen extends HookWidget {
                       child: addItemButton(
                         context: context,
                         memoId: memoId,
-                        newMemoIdState: newMemoIdState
+                        newMemoIdState: newMemoIdState,
+                        textEditingControllerList: textEditingControllerList
                       )
                   ),
                 ),

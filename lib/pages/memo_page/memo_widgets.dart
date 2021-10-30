@@ -1,9 +1,12 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hukaborimemo/common/model/database/db_provider.dart';
 import 'package:hukaborimemo/common/model/database/tables.dart';
 import 'package:hukaborimemo/pages/memo_page/memo_viewmodel.dart';
 import 'package:hukaborimemo/route/route.dart';
@@ -278,106 +281,129 @@ Widget memoListContent({
               ),
               Expanded(
                 flex: 9,
-                child: Container(
-                  padding: const EdgeInsets.only(left: 11, right: 5, top: 8, bottom: 8),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardTheme.color,
-                    borderRadius: BorderRadius.circular(5),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        spreadRadius: 1,
-                        blurRadius: 3,
-                        offset: Offset(0, 0),
-                      )
-                    ]
+                child: Dismissible(
+                  key: Key('${content[MemoTable.memoId]}'),
+                  background: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Colors.red,
+                    ),
+                    padding: EdgeInsets.only(
+                      right: 10,
+                    ),
+                    alignment: AlignmentDirectional.centerEnd,
+                    child: Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                    ),
                   ),
-                  child: Column(
-                    children: [
-                      content['tag_id'] != null?
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.only(top: 5),
-                          child: Container(
-                            padding: Platform.isIOS
-                                ? const EdgeInsets.only(left: 10, right: 10, top: 2, bottom: 2)
-                                : const EdgeInsets.only(left: 10, right: 10, top: 3, bottom: 4),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Color(0xFF5AC4CB),
-                              //todo: テーマで管理できるように色をメソッドで管理する
-                            ),
-                            child: Text(
-                              //todo: content['tag_id']をつかってタグの名前に変更する
-                              'なぜ？',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
+                  direction: DismissDirection.endToStart,
+                  confirmDismiss: (direction) async {
+                    await deleteMemoFunc(
+                        context: context,
+                        memoId: content[MemoTable.memoId],
+                        parentId: content[MemoTable.memoParentId]);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 11, right: 5, top: 8, bottom: 8),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardTheme.color,
+                      borderRadius: BorderRadius.circular(5),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          spreadRadius: 1,
+                          blurRadius: 3,
+                          offset: Offset(0, 0),
                         )
-                      : Container(),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 3),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              //todo: 最大サイズを決めて文字数が多く、それ以上大きくなる場合には「もっと見る」を設ける
-                              child: TextField(
-                                controller: textEditingControllerForMemo,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  contentPadding: EdgeInsets.only(top: 10, bottom: 10),
-                                  isDense: true,
-                                ),
-                                autofocus: content[MemoTable.memoId] == newMemoIdState.state? true : false,
+                      ]
+                    ),
+                    child: Column(
+                      children: [
+                        content['tag_id'] != null?
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            padding: const EdgeInsets.only(top: 5),
+                            child: Container(
+                              padding: Platform.isIOS
+                                  ? const EdgeInsets.only(left: 10, right: 10, top: 2, bottom: 2)
+                                  : const EdgeInsets.only(left: 10, right: 10, top: 3, bottom: 4),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Color(0xFF5AC4CB),
+                                //todo: テーマで管理できるように色をメソッドで管理する
+                              ),
+                              child: Text(
+                                //todo: content['tag_id']をつかってタグの名前に変更する
+                                'なぜ？',
                                 style: TextStyle(
-                                    fontSize: 16
+                                  fontSize: 12,
+                                  color: Colors.white,
                                 ),
-                                maxLines: null,
-                                textInputAction: TextInputAction.done,
-                                onChanged: (text) {
-                                  updateTitle(
-                                      context: context,
-                                      memoId: content[MemoTable.memoId],
-                                      title: text,
-                                      parentId: content[MemoTable.memoParentId],
-                                      tagId: content[MemoTable.memoTagId]
-                                  );
-                                },
                               ),
                             ),
-                            Material(
-                              borderRadius: BorderRadius.circular(5),
-                              clipBehavior: Clip.antiAlias,
-                              color: Colors.transparent,
-                              child: InkWell(
-                                onTap: () {
-                                  toMemoScreen(
-                                      context: context,
-                                      memoId: content[MemoTable.memoId],
-                                      parentId: content[MemoTable.memoParentId],
-                                      title: textEditingControllerForMemo.text,
-                                      tagId: content[MemoTable.memoTagId],
-                                      isFirstPage: false,
-                                      prePageTitle: titleState.state,
-                                      isNewOne: false,
-                                      textEditingController: textEditingControllerForMemo);
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: Icon(
-                                    CupertinoIcons.chat_bubble_2,
-                                    color: Colors.grey[400],
+                          )
+                        : Container(),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 3),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                //todo: 最大サイズを決めて文字数が多く、それ以上大きくなる場合には「もっと見る」を設ける
+                                child: TextField(
+                                  controller: textEditingControllerForMemo,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    contentPadding: EdgeInsets.only(top: 10, bottom: 10),
+                                    isDense: true,
+                                  ),
+                                  style: TextStyle(
+                                      fontSize: 16
+                                  ),
+                                  maxLines: null,
+                                  textInputAction: TextInputAction.done,
+                                  onChanged: (text) {
+                                    updateTitle(
+                                        context: context,
+                                        memoId: content[MemoTable.memoId],
+                                        title: text,
+                                        parentId: content[MemoTable.memoParentId],
+                                        tagId: content[MemoTable.memoTagId]
+                                    );
+                                  },
+                                ),
+                              ),
+                              Material(
+                                borderRadius: BorderRadius.circular(5),
+                                clipBehavior: Clip.antiAlias,
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {
+                                    toMemoScreen(
+                                        context: context,
+                                        memoId: content[MemoTable.memoId],
+                                        parentId: content[MemoTable.memoParentId],
+                                        title: textEditingControllerForMemo.text,
+                                        tagId: content[MemoTable.memoTagId],
+                                        isFirstPage: false,
+                                        prePageTitle: titleState.state,
+                                        isNewOne: false,
+                                        textEditingController: textEditingControllerForMemo);
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: Icon(
+                                      CupertinoIcons.chat_bubble_2,
+                                      color: Colors.grey[400],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            )
-                          ],
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               )
@@ -392,11 +418,13 @@ Widget memoListContent({
 Widget addItemButton({
   required BuildContext context,
   required int memoId,
-  required StateController<int> newMemoIdState
+  required StateController<int> newMemoIdState,
+  required List<TextEditingController> textEditingControllerList
 }) {
   return GestureDetector(
     onTap: () async {
       FocusScope.of(context).unfocus();
+      textEditingControllerList.add(TextEditingController(text: ''));
       await addNewMemo(
           context: context,
           memoId: memoId,
@@ -425,6 +453,99 @@ Widget addItemButton({
         CupertinoIcons.add,
         color: Colors.white,
         size: 23,
+      ),
+    ),
+  );
+}
+
+
+Widget alertForDeleteMemoDialogWidget(BuildContext context) {
+  return GestureDetector(
+    onTap: () {
+      Navigator.pop(context, false);
+    },
+    child: Material(
+      color: Colors.transparent,
+      child: SafeArea(
+        child: Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.8,
+            padding: const EdgeInsets.only(top: 30, left: 30, right: 30, bottom: 20),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Theme.of(context).cardTheme.color,
+                //todo: ダークモード対応をする
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(top: 30, bottom: 30),
+                  child: Text(
+                    'この項目に依存しているメモはすべて削除されます。よろしいですか？',
+                    style: TextStyle(
+                      fontSize: 16
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(height: 20,),
+                Material(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(5),
+                  clipBehavior: Clip.antiAlias,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pop(context, true);
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.7 - 60,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      padding: const EdgeInsets.only(top: 12, bottom: 12),
+                      child: Center(
+                        child: Text(
+                          'OK',
+                          style: TextStyle(
+                            color: Colors.white
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10,),
+                Material(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(5),
+                  clipBehavior: Clip.antiAlias,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pop(context, false);
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.7 - 60,
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      padding: const EdgeInsets.only(top: 12, bottom: 12),
+                      child: Center(
+                        child: Text(
+                          'キャンセル',
+                          style: TextStyle(
+                              color: Colors.red
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     ),
   );

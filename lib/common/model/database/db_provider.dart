@@ -124,12 +124,12 @@ class DBProvider {
 
   /// ------------------------ delete ------------------------
 
-  Future<void> deleteMemoData(int tagId) async {
+  Future<void> deleteMemoData(int memoId) async {
     final _db = await database;
     await _db.delete(
         'memo',
         where: '${MemoTable.memoId} = ?',
-        whereArgs: [tagId]
+        whereArgs: [memoId]
     );
   }
 
