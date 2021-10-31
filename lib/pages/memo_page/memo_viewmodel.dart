@@ -60,24 +60,44 @@ Future<void> addNewMemo({
 Future<bool> deleteMemoFunc({
   required BuildContext context,
   required int memoId,
-  required int parentId
+  required int parentId,
+  required List<TextEditingController> textEditingControllerList,
+  required List<int> memoIdList,
+  required List<FocusNode> focusNodeList
 }) async {
+
   final childMemos = await DBProvider.db.queryMemoData(memoId);
   if(childMemos.length != 0){
+
     var result = await showAlertForDeleteMemoDialog(context);
+
     if (result) {
       //todo: 関連するデータをすべて削除する必要があるため、DB構造に変更を加える
       // await DBProvider.db.deleteMemoData(memoId);
+      // removeControllersFromList(
+      //     textEditingControllerList: textEditingControllerList,
+      //     memoIdList: memoIdList,
+      //     focusNodeList: focusNodeList,
+      //     deleteItemId: memoId);
       context.refresh(queryMemoDataMemoProvider(parentId));
       return true;
     } else {
       return false;
     }
+
   } else {
+
     await DBProvider.db.deleteMemoData(memoId);
+    removeControllersFromList(
+        textEditingControllerList: textEditingControllerList,
+        memoIdList: memoIdList,
+        focusNodeList: focusNodeList,
+        deleteItemId: memoId);
     context.refresh(queryMemoDataMemoProvider(parentId));
     return true;
+
   }
+
 }
 
 Future<bool> showAlertForDeleteMemoDialog(BuildContext context) async {
@@ -88,4 +108,18 @@ Future<bool> showAlertForDeleteMemoDialog(BuildContext context) async {
       }
   );
   return result;
+}
+
+void removeControllersFromList({
+  required List<TextEditingController> textEditingControllerList,
+  required List<int> memoIdList,
+  required List<FocusNode> focusNodeList,
+  required int deleteItemId
+}) {
+
+  final index = memoIdList.indexOf(deleteItemId);
+  textEditingControllerList.removeAt(index);
+  memoIdList.removeAt(index);
+  focusNodeList.removeAt(index);
+
 }

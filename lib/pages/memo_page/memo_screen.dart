@@ -140,18 +140,22 @@ class MemoScreen extends HookWidget {
                                   isLastItem: true,
                                   content: data[index],
                                   titleState: titleState,
-                                  textEditingControllerForMemo: textEditingControllerList[index],
+                                  textEditingControllerList: textEditingControllerList,
+                                  memoIdList: memoIdList,
                                   newMemoIdState: newMemoIdState,
-                                  focusNode: focusNodeList[index]);
+                                  focusNodeList: focusNodeList,
+                                  listIndex: index);
                             } else {
                               return memoListContent(
                                   context: context,
                                   isLastItem: false,
                                   content: data[index],
                                   titleState: titleState,
-                                  textEditingControllerForMemo: textEditingControllerList[index],
+                                  textEditingControllerList: textEditingControllerList,
+                                  memoIdList: memoIdList,
                                   newMemoIdState: newMemoIdState,
-                                  focusNode: focusNodeList[index]);
+                                  focusNodeList: focusNodeList,
+                                  listIndex: index);
                             }
                           },
                           childCount: data.length

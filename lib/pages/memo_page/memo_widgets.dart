@@ -216,9 +216,11 @@ Widget memoListContent({
   required bool isLastItem,
   required Map<String, dynamic> content,
   required StateController<String> titleState,
-  required TextEditingController textEditingControllerForMemo,
+  required List<TextEditingController> textEditingControllerList,
+  required List<int> memoIdList,
   required StateController<int> newMemoIdState,
-  required FocusNode focusNode
+  required List<FocusNode> focusNodeList,
+  required int listIndex
 }) {
   return Container(
     child: Column(
@@ -304,7 +306,11 @@ Widget memoListContent({
                     await deleteMemoFunc(
                         context: context,
                         memoId: content[MemoTable.memoId],
-                        parentId: content[MemoTable.memoParentId]);
+                        parentId: content[MemoTable.memoParentId],
+                        textEditingControllerList: textEditingControllerList,
+                        memoIdList: memoIdList,
+                        focusNodeList: focusNodeList,
+                        );
                   },
                   child: Container(
                     padding: const EdgeInsets.only(left: 11, right: 5, top: 8, bottom: 8),
@@ -353,8 +359,8 @@ Widget memoListContent({
                               Expanded(
                                 //todo: 最大サイズを決めて文字数が多く、それ以上大きくなる場合には「もっと見る」を設ける
                                 child: TextField(
-                                  focusNode: focusNode,
-                                  controller: textEditingControllerForMemo,
+                                  focusNode: focusNodeList[listIndex],
+                                  controller: textEditingControllerList[listIndex],
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
                                     contentPadding: EdgeInsets.only(top: 10, bottom: 10),
@@ -386,12 +392,12 @@ Widget memoListContent({
                                         context: context,
                                         memoId: content[MemoTable.memoId],
                                         parentId: content[MemoTable.memoParentId],
-                                        title: textEditingControllerForMemo.text,
+                                        title: textEditingControllerList[listIndex].text,
                                         tagId: content[MemoTable.memoTagId],
                                         isFirstPage: false,
                                         prePageTitle: titleState.state,
                                         isNewOne: false,
-                                        textEditingController: textEditingControllerForMemo);
+                                        textEditingController: textEditingControllerList[listIndex]);
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.all(8),
