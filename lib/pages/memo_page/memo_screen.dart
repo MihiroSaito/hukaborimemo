@@ -41,6 +41,7 @@ class MemoScreen extends HookWidget {
   final newMemoIdStateProvider = StateProvider((ref) => 0);
   final List<TextEditingController> textEditingControllerList = [];
   final List<int> memoIdList = [];
+  final List<FocusNode> focusNodeList = [];
   final List<int> counter = [];
 
   @override
@@ -131,6 +132,7 @@ class MemoScreen extends HookWidget {
                             if (!memoIdList.contains(data[index][MemoTable.memoId])) {
                               textEditingControllerList.add(TextEditingController(text: data[index][MemoTable.memoText]));
                               memoIdList.add(data[index][MemoTable.memoId]);
+                              focusNodeList.add(FocusNode());
                             }
                             if(index == data.length - 1){
                               return memoListContent(
@@ -139,7 +141,8 @@ class MemoScreen extends HookWidget {
                                   content: data[index],
                                   titleState: titleState,
                                   textEditingControllerForMemo: textEditingControllerList[index],
-                                  newMemoIdState: newMemoIdState);
+                                  newMemoIdState: newMemoIdState,
+                                  focusNode: focusNodeList[index]);
                             } else {
                               return memoListContent(
                                   context: context,
@@ -147,7 +150,8 @@ class MemoScreen extends HookWidget {
                                   content: data[index],
                                   titleState: titleState,
                                   textEditingControllerForMemo: textEditingControllerList[index],
-                                  newMemoIdState: newMemoIdState);
+                                  newMemoIdState: newMemoIdState,
+                                  focusNode: focusNodeList[index]);
                             }
                           },
                           childCount: data.length
@@ -163,7 +167,10 @@ class MemoScreen extends HookWidget {
                         context: context,
                         memoId: memoId,
                         newMemoIdState: newMemoIdState,
-                        textEditingControllerList: textEditingControllerList
+                        textEditingControllerList: textEditingControllerList,
+                        memoIdList: memoIdList,
+                        focusNodeList: focusNodeList
+
                       )
                   ),
                 ),

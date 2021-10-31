@@ -36,7 +36,10 @@ final queryMemoDataMemoProvider =
 Future<void> addNewMemo({
   required BuildContext context,
   required int memoId,
-  required StateController<int> newMemoIdState
+  required StateController<int> newMemoIdState,
+  required List<TextEditingController> textEditingControllerList,
+  required List<int> memoIdList,
+  required List<FocusNode> focusNodeList
 }) async {
   final now = DateTime.now().toString();
   final MemoTable memoTable = MemoTable(
@@ -47,6 +50,9 @@ Future<void> addNewMemo({
       createdAt: now,
       updateAt: now);
   final newMemoId = await DBProvider.db.insertMemoData(memoTable);
+  textEditingControllerList.add(TextEditingController(text: ''));
+  memoIdList.add(newMemoId);
+  focusNodeList.add(FocusNode());
   newMemoIdState.state = newMemoId;
   context.refresh(queryMemoDataMemoProvider(memoId));
 }
@@ -68,7 +74,6 @@ Future<bool> deleteMemoFunc({
       return false;
     }
   } else {
-    print('false');
     await DBProvider.db.deleteMemoData(memoId);
     context.refresh(queryMemoDataMemoProvider(parentId));
     return true;

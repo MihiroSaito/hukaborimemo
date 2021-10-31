@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hukaborimemo/common/model/database/db_provider.dart';
 import 'package:hukaborimemo/common/model/database/tables.dart';
@@ -216,7 +217,8 @@ Widget memoListContent({
   required Map<String, dynamic> content,
   required StateController<String> titleState,
   required TextEditingController textEditingControllerForMemo,
-  required StateController<int> newMemoIdState
+  required StateController<int> newMemoIdState,
+  required FocusNode focusNode
 }) {
   return Container(
     child: Column(
@@ -351,6 +353,7 @@ Widget memoListContent({
                               Expanded(
                                 //todo: 最大サイズを決めて文字数が多く、それ以上大きくなる場合には「もっと見る」を設ける
                                 child: TextField(
+                                  focusNode: focusNode,
                                   controller: textEditingControllerForMemo,
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
@@ -419,16 +422,21 @@ Widget addItemButton({
   required BuildContext context,
   required int memoId,
   required StateController<int> newMemoIdState,
-  required List<TextEditingController> textEditingControllerList
+  required List<TextEditingController> textEditingControllerList,
+  required List<int> memoIdList,
+  required List<FocusNode> focusNodeList
 }) {
   return GestureDetector(
     onTap: () async {
       FocusScope.of(context).unfocus();
-      textEditingControllerList.add(TextEditingController(text: ''));
       await addNewMemo(
           context: context,
           memoId: memoId,
-          newMemoIdState: newMemoIdState);
+          newMemoIdState: newMemoIdState,
+          textEditingControllerList: textEditingControllerList,
+          memoIdList: memoIdList,
+          focusNodeList: focusNodeList);
+      focusNodeList.last.requestFocus();
     },
     child: Container(
       height: 60,
