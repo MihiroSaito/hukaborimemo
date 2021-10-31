@@ -317,7 +317,6 @@ Widget homeBottomBar({
           child: Center(
             child: GestureDetector(
               onTap: () async {
-                //todo: メモページへ移動する
                 //todo: ボタンを押した時のへフェクトを追加する。（グラデーションのためInkWellは使えないと思われる）
                 debugPrint('メモを新規作成し、移動');
                 await createNewMemo(context);

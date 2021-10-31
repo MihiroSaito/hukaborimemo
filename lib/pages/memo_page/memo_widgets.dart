@@ -474,7 +474,6 @@ Widget alertForDeleteMemoDialogWidget(BuildContext context) {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
               color: Theme.of(context).cardTheme.color,
-                //todo: ダークモード対応をする
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -482,6 +481,7 @@ Widget alertForDeleteMemoDialogWidget(BuildContext context) {
                 Container(
                   padding: const EdgeInsets.only(top: 30, bottom: 30),
                   child: Text(
+                    //todo: ここの文章をもう少し考える
                     'この項目に依存しているメモはすべて削除されます。よろしいですか？',
                     style: TextStyle(
                       fontSize: 16
