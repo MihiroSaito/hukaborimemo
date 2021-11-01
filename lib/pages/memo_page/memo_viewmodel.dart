@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -9,18 +11,20 @@ Future<void> updateTitle({
   required BuildContext context,
   required int memoId,
   required String title,
-  required int parentId,
-  required int? tagId
 }) async {
+
+  final latestMemoData = await DBProvider.db.queryOneMemoData(memoId);
+
   if(title == ''){
     title = '無題メモ';
   }
   final now = DateTime.now().toString();
   final MemoTable memoTable = MemoTable(
-      id: memoId,
-      parentId: parentId,
+      id: latestMemoData[MemoTable.memoId],
+      parentId: latestMemoData[MemoTable.memoParentId],
+      childIds: latestMemoData[MemoTable.memoChildIds],
       text: title,
-      tagId: tagId,
+      tagId: latestMemoData[MemoTable.memoTagId],
       createdAt: null,
       updateAt: now);
   final int id = await DBProvider.db.updateMemoData(memoTable);
@@ -41,15 +45,33 @@ Future<void> addNewMemo({
   required List<int> memoIdList,
   required List<FocusNode> focusNodeList
 }) async {
+
+  final latestCurrentMemoData = await DBProvider.db.queryOneMemoData(memoId);
+
   final now = DateTime.now().toString();
-  final MemoTable memoTable = MemoTable(
+  final MemoTable newMemoTable = MemoTable(
       id: null,
       parentId: memoId,
+      childIds: '[]',
       text: '',
       tagId: null,
       createdAt: now,
       updateAt: now);
-  final newMemoId = await DBProvider.db.insertMemoData(memoTable);
+  final newMemoId = await DBProvider.db.insertMemoData(newMemoTable);
+
+  final List childIds = json.decode(latestCurrentMemoData[MemoTable.memoChildIds]);
+  childIds.add(newMemoId);
+
+  final MemoTable currentMemoTable = MemoTable(
+      id: latestCurrentMemoData[MemoTable.memoId],
+      parentId: latestCurrentMemoData[MemoTable.memoParentId],
+      childIds: childIds.toString(),
+      text: latestCurrentMemoData[MemoTable.memoText],
+      tagId: latestCurrentMemoData[MemoTable.memoTagId],
+      createdAt: null,
+      updateAt: latestCurrentMemoData[MemoTable.memoUpdatedAt]);
+  await DBProvider.db.updateMemoData(currentMemoTable);
+
   textEditingControllerList.add(TextEditingController(text: ''));
   memoIdList.add(newMemoId);
   focusNodeList.add(FocusNode());
@@ -61,13 +83,14 @@ Future<bool> deleteMemoFunc({
   required BuildContext context,
   required int memoId,
   required int parentId,
+  required String childIds,
   required List<TextEditingController> textEditingControllerList,
   required List<int> memoIdList,
   required List<FocusNode> focusNodeList
 }) async {
 
-  final childMemos = await DBProvider.db.queryMemoData(memoId);
-  if(childMemos.length != 0){
+  final List childIdsList = json.decode(childIds);
+  if(childIdsList.length != 0){
 
     var result = await showAlertForDeleteMemoDialog(context);
 
