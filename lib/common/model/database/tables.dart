@@ -1,7 +1,6 @@
 class MemoTable {
   final int? id;
   final int parentId;
-  final String childIds;
   final String? text;
   final int? tagId;
   final String? createdAt;
@@ -10,7 +9,6 @@ class MemoTable {
   MemoTable({
     required this.id,
     required this.parentId,
-    required this.childIds,
     required this.text,
     required this.tagId,
     required this.createdAt,
@@ -20,7 +18,6 @@ class MemoTable {
   Map<String, dynamic> insertMap() {
     return {
       'parent_id': parentId,
-      'child_ids': childIds,
       'text': text,
       'tag_id': tagId,
       'created_at': createdAt,
@@ -31,7 +28,6 @@ class MemoTable {
   Map<String, dynamic> updateMap() {
     return {
       'parent_id': parentId,
-      'child_ids': childIds,
       'text': text,
       'tag_id': tagId,
       'updated_at': updateAt
@@ -40,7 +36,6 @@ class MemoTable {
 
   static const String memoId = 'id';
   static const String memoParentId = 'parent_id';
-  static const String memoChildIds = 'child_ids';
   static const String memoText = 'text';
   static const String memoTagId = 'tag_id';
   static const String memoCreatedAt = 'created_at';

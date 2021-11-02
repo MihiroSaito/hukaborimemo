@@ -33,7 +33,6 @@ class DBProvider {
           CREATE TABLE memo (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             parent_id INTEGER,
-            child_ids TEXT,
             text TEXT,
             tag_id INTEGER,
             created_at TEXT,
@@ -87,15 +86,6 @@ class DBProvider {
         .where((value) => value[MemoTable.memoParentId] == parentId)
         .toList();
     return extractedData;
-  }
-
-  Future<Map<String, dynamic>> queryOneMemoData(int memoId) async {
-    final _db = await database;
-    List<Map<String, dynamic>> allMemoData = await _db.query('memo');
-    List<Map<String, dynamic>> extractedData = allMemoData
-        .where((value) => value[MemoTable.memoId] == memoId)
-        .toList();
-    return extractedData.first;
   }
 
   Future<List<Map<String, dynamic>>> queryTagData() async {
