@@ -68,9 +68,10 @@ Widget settingContents(BuildContext context) {
             itemBuilder: (BuildContext context, int index){
               return Material(
                 child: InkWell(
-                  onTap: () {
-                    settingFunctions(
-                        settingTitle: SettingClass.settingMenus[index]['title']);
+                  onTap: () async {
+                    await settingFunctions(
+                        settingTitle: SettingClass.settingMenus[index]['title'],
+                        context: context);
                   },
                   child: Container(
                     height: 50,

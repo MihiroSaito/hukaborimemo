@@ -1,5 +1,12 @@
 
-void settingFunctions({required String settingTitle}) {
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
+
+Future<void> settingFunctions({
+  required String settingTitle,
+  required BuildContext context
+}) async {
 
   switch(settingTitle){
     case 'パスワード設定':
@@ -24,7 +31,12 @@ void settingFunctions({required String settingTitle}) {
       //todo: プライバシーポリシーへ
       break;
     case 'Licenses':
-      //todo: ライセンスへ
+      final info = await PackageInfo.fromPlatform();
+      showLicensePage(
+        context: context,
+        applicationName: info.appName,
+        applicationVersion: info.version,
+      );
       break;
     default:
       throw Exception('SettingClass.settingMenusに定義されていないページがありました。'
