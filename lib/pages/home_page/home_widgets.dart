@@ -206,6 +206,7 @@ Widget gridContent({
                     style: TextStyle(
                       fontSize: 15
                     ),
+                    overflow: TextOverflow.clip,
                   ),
                 ),
               ),
