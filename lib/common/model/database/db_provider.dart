@@ -33,6 +33,7 @@ class DBProvider {
           CREATE TABLE memo (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             parent_id INTEGER,
+            id_tree TEXT,
             text TEXT,
             tag_id INTEGER,
             created_at TEXT,
@@ -88,6 +89,15 @@ class DBProvider {
     return extractedData;
   }
 
+  Future<Map<String, dynamic>> queryOneMemoData(int memoId) async {
+    final _db = await database;
+    List<Map<String, dynamic>> allMemoData = await _db.query('memo');
+    List<Map<String, dynamic>> extractedData = allMemoData
+        .where((value) => value[MemoTable.memoId] == memoId)
+        .toList();
+    return extractedData.first;
+  }
+
   Future<List<Map<String, dynamic>>> queryTagData() async {
     final _db = await database;
     List<Map<String, dynamic>> allMemoData = await _db.query('tag');
@@ -131,6 +141,28 @@ class DBProvider {
         where: '${MemoTable.memoId} = ?',
         whereArgs: [memoId]
     );
+  }
+
+  Future<void> deleteRelatedMemoData(int memoId) async {
+    final _db = await database;
+    List<Map<String, dynamic>> relatedMemoData = [];
+    List<Map<String, dynamic>> allMemoData = await _db.query('memo');
+
+    for (int i = 0; i < allMemoData.length; i++) {
+      final String idTreeString = allMemoData[i][MemoTable.memoIdTree];
+      final List idTree = json.decode(idTreeString);
+      if(idTree.contains(memoId)){
+        relatedMemoData.add(allMemoData[i]);
+      }
+    }
+
+    for (int i = 0; i < relatedMemoData.length; i++) {
+      await _db.delete(
+          'memo',
+          where: '${MemoTable.memoId} = ?',
+          whereArgs: [relatedMemoData[i][MemoTable.memoId]]
+      );
+    }
   }
 
   Future<void> deleteTagData(int tagId) async {

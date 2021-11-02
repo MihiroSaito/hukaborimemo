@@ -5,9 +5,9 @@ import 'package:hukaborimemo/common/model/database/db_provider.dart';
 import 'package:hukaborimemo/common/model/database/tables.dart';
 import 'package:hukaborimemo/route/route.dart';
 import 'package:hukaborimemo/setting/prefs_keys.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/src/intl/date_format.dart';
 
 import 'home_widgets.dart';
 
@@ -22,14 +22,26 @@ void showHomeOptionDialog(BuildContext context) {
 
 Future<void> createNewMemo(BuildContext context) async {
   final now = DateTime.now().toString();
-  final MemoTable memoTable = MemoTable(
+  final MemoTable newMemoTable = MemoTable(
       id: null,
       parentId: 0,
+      idTree: '[]',
       text: '無題メモ',
       tagId: null,
       createdAt: now,
       updateAt: now);
-  final int memoId = await DBProvider.db.insertMemoData(memoTable);
+  final int memoId = await DBProvider.db.insertMemoData(newMemoTable);
+
+  final MemoTable currentMemoTable = MemoTable(
+      id: null,
+      parentId: 0,
+      idTree: '[$memoId]',
+      text: '無題メモ',
+      tagId: null,
+      createdAt: now,
+      updateAt: now);
+  await DBProvider.db.updateMemoData(currentMemoTable);
+
   toMemoScreen(
       context: context,
       memoId: memoId,

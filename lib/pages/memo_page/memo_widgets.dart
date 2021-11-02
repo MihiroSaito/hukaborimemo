@@ -148,9 +148,7 @@ Widget memoTitleArea({
               updateTitle(
                 context: context,
                 memoId: memoId,
-                title: text,
-                parentId: parentId,
-                tagId: tagId);
+                title: text);
             },
           ),
         ),
@@ -375,9 +373,7 @@ Widget memoListContent({
                                     updateTitle(
                                         context: context,
                                         memoId: content[MemoTable.memoId],
-                                        title: text,
-                                        parentId: content[MemoTable.memoParentId],
-                                        tagId: content[MemoTable.memoTagId]
+                                        title: text
                                     );
                                   },
                                 ),
