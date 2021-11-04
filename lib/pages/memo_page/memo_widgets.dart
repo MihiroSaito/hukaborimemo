@@ -5,9 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:hukaborimemo/common/model/database/db_provider.dart';
 import 'package:hukaborimemo/common/model/database/tables.dart';
 import 'package:hukaborimemo/pages/memo_page/memo_viewmodel.dart';
 import 'package:hukaborimemo/route/route.dart';
@@ -124,7 +122,7 @@ Widget memoTitleArea({
                 ),
               ),
             ),
-            SizedBox(height: 13,),
+            SizedBox(height: 5,),
           ],
         ) : Container(),
         //todo: タグがあった場合にはタグを表示する
@@ -139,7 +137,8 @@ Widget memoTitleArea({
             ),
             autofocus: isNewOne? true :false,
             style: TextStyle(
-                fontSize: 17
+                fontSize: 17,
+                fontWeight: FontWeight.w700,
             ),
             maxLines: null,
             textInputAction: TextInputAction.done,
@@ -365,7 +364,8 @@ Widget memoListContent({
                                     isDense: true,
                                   ),
                                   style: TextStyle(
-                                      fontSize: 16
+                                      fontSize: 16,
+                                      height: 1.3
                                   ),
                                   maxLines: null,
                                   textInputAction: TextInputAction.done,

@@ -204,9 +204,10 @@ Widget gridContent({
                   child: Text(
                     '$memoTitle',
                     style: TextStyle(
-                      fontSize: 15
+                      fontSize: 14
                     ),
-                    overflow: TextOverflow.clip,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 3,
                   ),
                 ),
               ),
@@ -319,7 +320,6 @@ Widget homeBottomBar({
             child: GestureDetector(
               onTap: () async {
                 //todo: ボタンを押した時のへフェクトを追加する。（グラデーションのためInkWellは使えないと思われる）
-                debugPrint('メモを新規作成し、移動');
                 await createNewMemo(context);
               },
               child: Container(
@@ -473,7 +473,7 @@ Widget widgetWhenThereIsNoMemo({
             child: Container(
               width: windowSize.width * 0.7,
               child: Text(
-                'メモが１つもありません。\n＋ボタンから新しくメモを作成しよう！',
+                'メモが１つもありません。\n＋ボタンから新しくメモを作成しましょう！',
                 style: TextStyle(
                     fontSize: 18,
                     color: Theme.of(context).textTheme.headline6!.color,
