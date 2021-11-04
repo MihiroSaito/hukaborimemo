@@ -2,6 +2,7 @@ import 'package:cupertino_back_gesture/cupertino_back_gesture.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hukaborimemo/common/initial_processing.dart';
 import 'package:hukaborimemo/setting/theme.dart';
 import 'package:hukaborimemo/pages/home_page/home_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -11,6 +12,7 @@ import 'common/model/database/db_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DBProvider.db.database;
+  await InitialProcessing.function();
   runApp(
       ProviderScope(
           child: MyApp()

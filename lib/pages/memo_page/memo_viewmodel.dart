@@ -15,9 +15,6 @@ Future<void> updateTitle({
 
   final latestMemoData = await DBProvider.db.queryOneMemoData(memoId);
 
-  if(title == ''){
-    title = '無題メモ';
-  }
   final now = DateTime.now().toString();
   final MemoTable memoTable = MemoTable(
       id: latestMemoData[MemoTable.memoId],
@@ -34,6 +31,12 @@ final queryMemoDataMemoProvider =
   FutureProvider.autoDispose.family<List<Map<String, dynamic>>, int>((ref, memoId) async {
     return await DBProvider.db
         .queryMemoData(memoId);
+  }
+);
+
+final queryTagDataProvider =
+  FutureProvider.autoDispose.family<Map<String, dynamic>, int>((ref, tagId) async {
+    return await DBProvider.db.queryOneTagData(tagId);
   }
 );
 

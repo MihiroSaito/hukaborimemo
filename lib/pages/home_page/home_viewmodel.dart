@@ -104,9 +104,9 @@ String getCreatedDate(String dateTimeString) {
   if(datetime.difference(now).inDays == 0 && datetime.day == now.day) {
     var formatter = DateFormat('HH:mm', "ja_JP");
     var formatted = formatter.format(datetime);
-    return '         $formatted'; //文字の大きさを揃えるためにスペースを入れている
+    return '    $formatted    '; //文字の大きさを揃えるためにスペースを入れている
   } else if (yesterday == memoDateYesterday) {
-    return '            昨日'; //文字の大きさを揃えるためにスペースを入れている
+    return '     昨日     '; //文字の大きさを揃えるためにスペースを入れている
   } else {
     var formatter = DateFormat('yyyy/MM/dd', "ja_JP");
     var formatted = formatter.format(datetime);

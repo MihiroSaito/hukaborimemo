@@ -37,6 +37,7 @@ class MemoScreen extends HookWidget {
   final TextEditingController? textEditingControllerForTitle;
 
   final titleStateProvider = StateProvider((ref) => '');
+  final tagIdStateProvider = StateProvider((ref) => 0);
   final newMemoIdStateProvider = StateProvider((ref) => 0);
   final List<TextEditingController> textEditingControllerList = [];
   final List<int> memoIdList = [];
@@ -54,11 +55,15 @@ class MemoScreen extends HookWidget {
         : useTextEditingController(text: title);
     final memoDataProvider = useProvider(queryMemoDataMemoProvider(memoId));
     final titleState = useProvider(titleStateProvider);
+    final tagIdState = useProvider(tagIdStateProvider);
     final newMemoIdState = useProvider(newMemoIdStateProvider);
 
     useEffect(() {
       WidgetsBinding.instance!.addPostFrameCallback((_){
         titleState.state = title;
+        if (tagId != null) {
+          tagIdState.state = tagId!;
+        }
       });
 
       return (){
@@ -91,10 +96,10 @@ class MemoScreen extends HookWidget {
                       memoId: memoId,
                       parentId: parentId,
                       titleState: titleState,
-                      tagId: tagId,
                       isFirstPage: isFirstPage,
                       isNewOne: isNewOne,
-                      textEditingController: textEditingController)
+                      textEditingController: textEditingController,
+                      tagIdState: tagIdState)
                 ),
                 memoDataProvider.when(
                   loading: () => SliverToBoxAdapter(),

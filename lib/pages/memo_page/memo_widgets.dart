@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hukaborimemo/common/model/database/tables.dart';
 import 'package:hukaborimemo/pages/memo_page/memo_viewmodel.dart';
@@ -127,10 +128,10 @@ Widget memoTitleArea({
   required int memoId,
   required int parentId,
   required StateController<String> titleState,
-  required int? tagId,
   required bool isFirstPage,
   required bool isNewOne,
-  required TextEditingController textEditingController
+  required TextEditingController textEditingController,
+  required StateController<int> tagIdState,
 }) {
 
   return Container(
@@ -173,8 +174,44 @@ Widget memoTitleArea({
             ),
             SizedBox(height: 5,),
           ],
+        ) : tagIdState.state != 0? HookBuilder(
+          builder: (hookContext) {
+
+            final tagIdProvider = useProvider(queryTagDataProvider(tagIdState.state));
+
+            return tagIdProvider.when(
+                loading: () => Container(),
+                error: (e, s) => Container(),
+                data: (data) {
+                  return Column(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        alignment: Alignment.centerLeft,
+                        child: Container(
+                          padding: Platform.isIOS
+                              ? const EdgeInsets.only(left: 13, right: 13, top: 2, bottom: 2)
+                              : const EdgeInsets.only(left: 13, right: 13, top: 3, bottom: 4),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Color(0xFF5AC4CB)
+                          ),
+                          child: Text(
+                            '${data[TagTable.tagName]}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 5,),
+                    ],
+                  );
+                }
+            );
+          }
         ) : Container(),
-        //todo: タグがあった場合にはタグを表示する
         Padding(
           padding: EdgeInsets.only(left: 5, right: 5),
           child: TextField(

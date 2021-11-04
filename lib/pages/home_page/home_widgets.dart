@@ -219,7 +219,7 @@ Widget gridContent({
             child: Row(
               children: [
                 Expanded(
-                  flex: 5,
+                  flex: 3,
                   child: Container()
                 ),
                 Expanded(
@@ -230,9 +230,13 @@ Widget gridContent({
                       style: TextStyle(
                         color: Theme.of(context).textTheme.headline6!.color,
                       ),
-                      textAlign: TextAlign.end,
+                      textAlign: TextAlign.start,
                     ),
                   ),
+                ),
+                Expanded(
+                    flex: 3,
+                    child: Container()
                 ),
               ],
             ),

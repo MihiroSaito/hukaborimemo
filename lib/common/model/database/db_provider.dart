@@ -100,8 +100,17 @@ class DBProvider {
 
   Future<List<Map<String, dynamic>>> queryTagData() async {
     final _db = await database;
-    List<Map<String, dynamic>> allMemoData = await _db.query('tag');
-    return allMemoData;
+    List<Map<String, dynamic>> allTagData = await _db.query('tag');
+    return allTagData;
+  }
+
+  Future<Map<String, dynamic>> queryOneTagData(int tagId) async {
+    final _db = await database;
+    List<Map<String, dynamic>> allTagData = await _db.query('tag');
+    List<Map<String, dynamic>> extractedData = allTagData
+        .where((value) => value[TagTable.tagId] == tagId)
+        .toList();
+    return extractedData.first;
   }
 
 
