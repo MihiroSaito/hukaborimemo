@@ -97,8 +97,19 @@ String getCreatedDate(String dateTimeString) {
   initializeDateFormatting("ja_JP");
 
   DateTime datetime = DateTime.parse(dateTimeString); // StringからDate
+  DateTime now = DateTime.now();
+  final yesterday = DateTime(now.year, now.month, now.day -1);
+  final memoDateYesterday = DateTime(datetime.year, datetime.month, datetime.day);
 
-  var formatter = DateFormat('yyyy/MM/dd', "ja_JP");
-  var formatted = formatter.format(datetime); // DateからString
-  return formatted;
+  if(datetime.difference(now).inDays == 0 && datetime.day == now.day) {
+    var formatter = DateFormat('HH:mm', "ja_JP");
+    var formatted = formatter.format(datetime);
+    return '         $formatted'; //文字の大きさを揃えるためにスペースを入れている
+  } else if (yesterday == memoDateYesterday) {
+    return '            昨日'; //文字の大きさを揃えるためにスペースを入れている
+  } else {
+    var formatter = DateFormat('yyyy/MM/dd', "ja_JP");
+    var formatted = formatter.format(datetime);
+    return formatted;
+  }
 }

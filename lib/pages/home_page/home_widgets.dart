@@ -137,8 +137,8 @@ Widget contentsArea({
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               mainAxisSpacing: 10.0,
               crossAxisSpacing: 10.0,
-              crossAxisCount: 3,
-              childAspectRatio: 0.8
+              crossAxisCount: 2,
+              childAspectRatio: 1.3
           ),
           delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index){
@@ -172,7 +172,7 @@ Widget gridContent({
       child: Column(
         children: [
           AspectRatio(
-            aspectRatio: 1.0,
+            aspectRatio: 1.8,
             child: GestureDetector(
               onTap: (){
                 toMemoScreen(
@@ -187,7 +187,7 @@ Widget gridContent({
                     textEditingController: null);
               },
               child: Container(
-                padding: const EdgeInsets.all(7),
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   color: Theme.of(context).cardTheme.color,
@@ -219,11 +219,11 @@ Widget gridContent({
             child: Row(
               children: [
                 Expanded(
-                  flex: 3,
+                  flex: 5,
                   child: Container()
                 ),
                 Expanded(
-                  flex: 7,
+                  flex: 4,
                   child: FittedBox(
                     child: Text(
                       '${getCreatedDate(dateTime)}',
