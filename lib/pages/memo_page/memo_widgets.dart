@@ -42,6 +42,7 @@ Widget memoAppBar({
                   child: Icon(
                     CupertinoIcons.chevron_back,
                     color: Color(0xFF868E96),
+                    size: 25,
                   ),
                 ),
               ),
@@ -56,16 +57,65 @@ Widget memoAppBar({
                 ),
               ) : Container(),
             ),
-            //todo: タイトルを編集している時は「完了」の文字を表示する
-            isFirstPage? Padding(
-              padding: const EdgeInsets.all(8),
-              child: Icon(
-                  CupertinoIcons.lightbulb_fill,
-                  // color: Colors.transparent,
-                size: 20,
-                color: Color(0xFFF7DC84),
+            SizedBox(width: 10,),
+            Material(
+              borderRadius: BorderRadius.circular(5),
+              clipBehavior: Clip.antiAlias,
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () {
+
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Icon(
+                    CupertinoIcons.checkmark_alt,
+                    size: 25,
+                    color: Color(0xFF5AC4CB),
+                    //todo: テーマで管理できるように色をメソッドで管理する
+                  ),
+                ),
+              ),
+            ),
+            Material(
+              borderRadius: BorderRadius.circular(5),
+              clipBehavior: Clip.antiAlias,
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () {
+
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Icon(
+                    CupertinoIcons.ellipsis,
+                    size: 25,
+                    color: Color(0xFF5AC4CB),
+                    //todo: テーマで管理できるように色をメソッドで管理する
+                  ),
+                ),
+              ),
+            ),
+            isFirstPage? Material(
+              borderRadius: BorderRadius.circular(5),
+              clipBehavior: Clip.antiAlias,
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () {
+
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Icon(
+                    CupertinoIcons.question,
+                    // color: Colors.transparent,
+                    size: 23,
+                    color: Color(0xFFF7DC84),
+                  ),
+                ),
               ),
             ) : Container(),
+            SizedBox(width: 5,),
           ],
         ),
       ),
@@ -323,91 +373,63 @@ Widget memoListContent({
                         )
                       ]
                     ),
-                    child: Column(
-                      children: [
-                        content['tag_id'] != null?
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            padding: const EdgeInsets.only(top: 5),
-                            child: Container(
-                              padding: Platform.isIOS
-                                  ? const EdgeInsets.only(left: 10, right: 10, top: 2, bottom: 2)
-                                  : const EdgeInsets.only(left: 10, right: 10, top: 3, bottom: 4),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Color(0xFF5AC4CB),
-                                //todo: テーマで管理できるように色をメソッドで管理する
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 3),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            //todo: 最大サイズを決めて文字数が多く、それ以上大きくなる場合には「もっと見る」を設ける
+                            child: TextField(
+                              focusNode: focusNodeList[listIndex],
+                              controller: textEditingControllerList[listIndex],
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.only(top: 10, bottom: 10),
+                                isDense: true,
                               ),
-                              child: Text(
-                                //todo: content['tag_id']をつかってタグの名前に変更する
-                                'なぜ？',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.white,
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  height: 1.3
+                              ),
+                              maxLines: null,
+                              textInputAction: TextInputAction.done,
+                              onChanged: (text) {
+                                updateTitle(
+                                    context: context,
+                                    memoId: content[MemoTable.memoId],
+                                    title: text
+                                );
+                              },
+                            ),
+                          ),
+                          Material(
+                            borderRadius: BorderRadius.circular(5),
+                            clipBehavior: Clip.antiAlias,
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () {
+                                toMemoScreen(
+                                    context: context,
+                                    memoId: content[MemoTable.memoId],
+                                    parentId: content[MemoTable.memoParentId],
+                                    title: textEditingControllerList[listIndex].text,
+                                    tagId: content[MemoTable.memoTagId],
+                                    isFirstPage: false,
+                                    prePageTitle: titleState.state,
+                                    isNewOne: false,
+                                    textEditingController: textEditingControllerList[listIndex]);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Icon(
+                                  CupertinoIcons.chat_bubble_2,
+                                  color: Colors.grey[400],
                                 ),
                               ),
                             ),
                           )
-                        : Container(),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 3),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                //todo: 最大サイズを決めて文字数が多く、それ以上大きくなる場合には「もっと見る」を設ける
-                                child: TextField(
-                                  focusNode: focusNodeList[listIndex],
-                                  controller: textEditingControllerList[listIndex],
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    contentPadding: EdgeInsets.only(top: 10, bottom: 10),
-                                    isDense: true,
-                                  ),
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      height: 1.3
-                                  ),
-                                  maxLines: null,
-                                  textInputAction: TextInputAction.done,
-                                  onChanged: (text) {
-                                    updateTitle(
-                                        context: context,
-                                        memoId: content[MemoTable.memoId],
-                                        title: text
-                                    );
-                                  },
-                                ),
-                              ),
-                              Material(
-                                borderRadius: BorderRadius.circular(5),
-                                clipBehavior: Clip.antiAlias,
-                                color: Colors.transparent,
-                                child: InkWell(
-                                  onTap: () {
-                                    toMemoScreen(
-                                        context: context,
-                                        memoId: content[MemoTable.memoId],
-                                        parentId: content[MemoTable.memoParentId],
-                                        title: textEditingControllerList[listIndex].text,
-                                        tagId: content[MemoTable.memoTagId],
-                                        isFirstPage: false,
-                                        prePageTitle: titleState.state,
-                                        isNewOne: false,
-                                        textEditingController: textEditingControllerList[listIndex]);
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8),
-                                    child: Icon(
-                                      CupertinoIcons.chat_bubble_2,
-                                      color: Colors.grey[400],
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
