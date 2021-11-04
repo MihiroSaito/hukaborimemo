@@ -356,7 +356,8 @@ Widget memoListContent({
                         textEditingControllerList: textEditingControllerList,
                         memoIdList: memoIdList,
                         focusNodeList: focusNodeList,
-                        );
+                        memoText: textEditingControllerList[listIndex].text
+                    );
                   },
                   child: Container(
                     padding: const EdgeInsets.only(left: 11, right: 5, top: 8, bottom: 8),

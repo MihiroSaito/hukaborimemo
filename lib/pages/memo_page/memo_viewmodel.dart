@@ -60,9 +60,7 @@ Future<void> addNewMemo({
   final newMemoId = await DBProvider.db.insertMemoData(newMemoTable);
 
   final List idTree = json.decode(latestCurrentMemoData[MemoTable.memoIdTree]);
-  print('latestCurrentMemoData[MemoTable.memoIdTree] = ${latestCurrentMemoData[MemoTable.memoIdTree]}');
   idTree.add(newMemoId);
-  print(idTree);
 
   final MemoTable currentMemoTable = MemoTable(
       id: newMemoId,
@@ -88,16 +86,16 @@ Future<bool> deleteMemoFunc({
   required int parentId,
   required List<TextEditingController> textEditingControllerList,
   required List<int> memoIdList,
-  required List<FocusNode> focusNodeList
+  required List<FocusNode> focusNodeList,
+  required String memoText,
 }) async {
 
   final childMemos = await DBProvider.db.queryMemoData(memoId);
-  if(childMemos.length != 0){
+  if(childMemos.length != 0 || memoText != ''){
 
     var result = await showAlertForDeleteMemoDialog(context);
 
     if (result) {
-      //todo: 関連するデータをすべて削除する必要があるため、DB構造に変更を加える
       await DBProvider.db.deleteRelatedMemoData(memoId);
       removeControllersFromList(
           textEditingControllerList: textEditingControllerList,
