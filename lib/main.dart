@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
     return BackGestureWidthTheme(
       backGestureWidth: BackGestureWidth.fraction(2 / 5),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: '深堀りメモ',
         theme: ThemeClass.light(),
         darkTheme: ThemeClass.dark(),

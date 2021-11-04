@@ -13,7 +13,6 @@ import 'package:hukaborimemo/route/route.dart';
 Widget memoAppBar({
   required BuildContext context,
   required double safeAreaPaddingTop,
-  required StateController<bool> isDisplayedAppbar,
   required bool isFirstPage,
   required String? prePageTitle
 }) {
@@ -57,14 +56,14 @@ Widget memoAppBar({
                 ),
               ) : Container(),
             ),
-            SizedBox(width: 10,),
+            SizedBox(width: 7,),
             Material(
               borderRadius: BorderRadius.circular(5),
               clipBehavior: Clip.antiAlias,
               color: Colors.transparent,
               child: InkWell(
                 onTap: () {
-
+                  //todo: この深堀りのまとめをできるページorなにかを表示する
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8),
@@ -83,7 +82,7 @@ Widget memoAppBar({
               color: Colors.transparent,
               child: InkWell(
                 onTap: () {
-
+                  //todo: メモページのオプションを表示する
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8),
@@ -102,7 +101,7 @@ Widget memoAppBar({
               color: Colors.transparent,
               child: InkWell(
                 onTap: () {
-
+                  //todo: 深堀りのヒントを表示する
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8),

@@ -36,7 +36,6 @@ class MemoScreen extends HookWidget {
   final bool isNewOne;
   final TextEditingController? textEditingControllerForTitle;
 
-  final isDisplayedAppbarProvider = StateProvider((ref) => false);
   final titleStateProvider = StateProvider((ref) => '');
   final newMemoIdStateProvider = StateProvider((ref) => 0);
   final List<TextEditingController> textEditingControllerList = [];
@@ -50,7 +49,6 @@ class MemoScreen extends HookWidget {
     final safeAreaPadding = MediaQuery.of(context).padding;
     final windowSize = MediaQuery.of(context).size;
     final ScrollController controller = useScrollController();
-    final isDisplayedAppbar = useProvider(isDisplayedAppbarProvider);
     final TextEditingController textEditingController = textEditingControllerForTitle != null
         ? textEditingControllerForTitle!
         : useTextEditingController(text: title);
@@ -59,14 +57,6 @@ class MemoScreen extends HookWidget {
     final newMemoIdState = useProvider(newMemoIdStateProvider);
 
     useEffect(() {
-      controller.addListener(() {
-        double scrollOffset = controller.offset;
-        if (scrollOffset > 60) {
-          isDisplayedAppbar.state = true;
-        } else if (scrollOffset < 60) {
-          isDisplayedAppbar.state = false;
-        }
-      });
       WidgetsBinding.instance!.addPostFrameCallback((_){
         titleState.state = title;
       });
@@ -192,19 +182,9 @@ class MemoScreen extends HookWidget {
               child: memoAppBar(
                   context: context,
                   safeAreaPaddingTop: safeAreaPadding.top,
-                  isDisplayedAppbar: isDisplayedAppbar,
                   isFirstPage: isFirstPage,
                   prePageTitle: prePageTitle),
             ),
-            // Positioned(
-            //   bottom: 0,
-            //   left: 0,
-            //   right: 0,
-            //   child: Container(
-            //     height: 50,
-            //     color: Colors.red,
-            //   ),
-            // ),
           ],
         ),
       ),
