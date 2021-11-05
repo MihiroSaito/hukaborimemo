@@ -47,7 +47,6 @@ Widget memoAppBar({
                 ),
               ),
             ),
-            //todo: スクロール量が60以上になったらTextをセンターに表示してこのページのタイトルを濃い色で表示する。
             Expanded(
               child: !isFirstPage && prePageTitle != null? Text(
                 '$prePageTitle',
@@ -151,67 +150,11 @@ Widget memoTitleArea({
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        isFirstPage? Column(
-          children: [
-            Container(
-              width: double.infinity,
-              alignment: Alignment.centerLeft,
-              child: Container(
-                padding: Platform.isIOS
-                    ? const EdgeInsets.only(left: 13, right: 13, top: 2, bottom: 2)
-                    : const EdgeInsets.only(left: 13, right: 13, top: 3, bottom: 4),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Theme.of(context).bottomAppBarColor
-                ),
-                child: Text(
-                  'タイトル',
-                  style: TextStyle(
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 5,),
-          ],
-        ) : tagIdState.state != 0? HookBuilder(
-          builder: (hookContext) {
-
-            final tagIdProvider = useProvider(queryTagDataProvider(tagIdState.state));
-
-            return tagIdProvider.when(
-                loading: () => Container(),
-                error: (e, s) => Container(),
-                data: (data) {
-                  return Column(
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                          padding: Platform.isIOS
-                              ? const EdgeInsets.only(left: 13, right: 13, top: 2, bottom: 2)
-                              : const EdgeInsets.only(left: 13, right: 13, top: 3, bottom: 4),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Color(0xFF5AC4CB)
-                          ),
-                          child: Text(
-                            '${data[TagTable.tagName]}',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.white
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 5,),
-                    ],
-                  );
-                }
-            );
-          }
-        ) : Container(),
+        titleTagWidget(
+            isFirstPage: isFirstPage,
+            context: context,
+            tagIdState: tagIdState
+        ),
         Padding(
           padding: EdgeInsets.only(left: 5, right: 5),
           child: TextField(
@@ -238,6 +181,190 @@ Widget memoTitleArea({
           ),
         ),
       ],
+    ),
+  );
+}
+
+Widget titleTagWidget({
+  required bool isFirstPage,
+  required BuildContext context,
+  required StateController<int> tagIdState,
+}) {
+  return Container(
+    child: isFirstPage? Column(  /// メモのファーストページであった場合
+      children: [
+        Container(
+          width: double.infinity,
+          alignment: Alignment.centerLeft,
+          child: Container(
+            padding: Platform.isIOS
+                ? const EdgeInsets.only(left: 13, right: 13, top: 2, bottom: 2)
+                : const EdgeInsets.only(left: 13, right: 13, top: 3, bottom: 4),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Theme.of(context).bottomAppBarColor
+            ),
+            child: Text(
+              'タイトル',
+              style: TextStyle(
+                fontSize: 12,
+              ),
+            ),
+          ),
+        ),
+        SizedBox(height: 5,),
+      ],
+    ) : tagIdState.state == 0? Column(  /// 「タグを選択」を表示する
+      children: [
+        Container(
+          width: double.infinity,
+          alignment: Alignment.centerLeft,
+          child: GestureDetector(
+            onTap: () {
+              //todo: タグを選択できるようにする
+            },
+            child: Container(
+              padding: Platform.isIOS
+                  ? const EdgeInsets.only(left: 13, right: 13, top: 2, bottom: 2)
+                  : const EdgeInsets.only(left: 13, right: 13, top: 3, bottom: 4),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: Color(0xFF5AC4CB),
+                    width: 1
+                  )
+                  //todo: テーマカラーにする
+              ),
+              child: Text(
+                'タグを選択',
+                style: TextStyle(
+                  fontSize: 12,
+                    color: Color(0xFF5AC4CB)
+                  //todo: テーマカラーにする
+                ),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(height: 5,),
+      ],
+    ) : tagIdState.state == -1? Container( /// 推奨タグを表示する
+      width: double.infinity,
+      alignment: Alignment.centerLeft,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                '推奨タグ:',
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.headline5!.color,
+                  fontSize: 13,
+                ),
+              ),
+              SizedBox(width: 10,),
+              Expanded(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          //todo: 推奨タグにあるタグをDBに保存する
+                        },
+                        child: Container(
+                          padding: Platform.isIOS
+                              ? const EdgeInsets.only(left: 13, right: 13, top: 2, bottom: 2)
+                              : const EdgeInsets.only(left: 13, right: 13, top: 3, bottom: 4),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                  color: Color(0xFF5AC4CB),
+                                  width: 1
+                              )
+                          ),
+                          child: Text(
+                            //todo: titleを利用して推奨タグを変更＆表示する
+                            'なぜ？',
+                            style: TextStyle(
+                                fontSize: 13,
+                                color: Color(0xFF5AC4CB)
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10,),
+                      GestureDetector(
+                        onTap: () {
+                          //todo: 全てのタグを表示する
+                        },
+                        child: Container(
+                          padding: Platform.isIOS
+                              ? const EdgeInsets.only(left: 13, right: 13, top: 2, bottom: 2)
+                              : const EdgeInsets.only(left: 13, right: 13, top: 3, bottom: 4),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                  color: Theme.of(context).bottomAppBarColor,
+                                  width: 1
+                              )
+                          ),
+                          child: Text(
+                            '他のタグを使用',
+                            style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.grey.shade400
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 5,),
+        ],
+      ),
+    ) : HookBuilder(  /// タグが設定されていた場合
+        builder: (hookContext) {
+
+          final tagIdProvider = useProvider(queryTagDataProvider(tagIdState.state));
+
+          return tagIdProvider.when(
+              loading: () => Container(),
+              error: (e, s) => Container(),
+              data: (data) {
+                return Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        padding: Platform.isIOS
+                            ? const EdgeInsets.only(left: 13, right: 13, top: 2, bottom: 2)
+                            : const EdgeInsets.only(left: 13, right: 13, top: 3, bottom: 4),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Color(0xFF5AC4CB)
+                        ),
+                        child: Text(
+                          '${data[TagTable.tagName]}',
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 5,),
+                  ],
+                );
+              }
+          );
+        }
     ),
   );
 }

@@ -37,7 +37,7 @@ class MemoScreen extends HookWidget {
   final TextEditingController? textEditingControllerForTitle;
 
   final titleStateProvider = StateProvider((ref) => '');
-  final tagIdStateProvider = StateProvider((ref) => 0);
+  final tagIdStateProvider = StateProvider((ref) => -1);
   final newMemoIdStateProvider = StateProvider((ref) => 0);
   final List<TextEditingController> textEditingControllerList = [];
   final List<int> memoIdList = [];
