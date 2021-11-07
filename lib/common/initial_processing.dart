@@ -32,6 +32,8 @@ class InitialProcessing {
         await Future.wait([DBProvider.db.insertTagData(tagTable)]);
       }
 
+      prefs.setBool(PrefsKeys.firstRun, false);
+
     }
   }
 

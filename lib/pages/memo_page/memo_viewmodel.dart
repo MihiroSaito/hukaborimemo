@@ -149,3 +149,23 @@ void removeControllersFromList({
   focusNodeList.removeAt(index);
 
 }
+
+Future<void> showSelectTagBottomSheet({
+  required BuildContext context
+}) async {
+
+  final result = await DBProvider.db.queryTagData();
+  final List<Map<String, dynamic>> allTag = List.of(result);
+  final Map<String, dynamic> createTagTag = {};
+  allTag.add(createTagTag);
+
+  showModalBottomSheet<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return selectTagBottomSheetWidget(
+        context: context,
+        allTag: allTag
+      );
+    },
+  );
+}

@@ -231,9 +231,9 @@ Widget titleTagWidget({
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
                     color: Color(0xFF5AC4CB),
+                    //todo: テーマカラーにする
                     width: 1
                   )
-                  //todo: テーマカラーにする
               ),
               child: Text(
                 'タグを選択',
@@ -298,6 +298,7 @@ Widget titleTagWidget({
                       GestureDetector(
                         onTap: () {
                           //todo: 全てのタグを表示する
+                          showSelectTagBottomSheet(context: context);
                         },
                         child: Container(
                           padding: Platform.isIOS
@@ -742,6 +743,122 @@ Widget alertForDeleteMemoDialogWidget(BuildContext context) {
             ),
           ),
         ),
+      ),
+    ),
+  );
+}
+
+
+Widget selectTagBottomSheetWidget({
+  required BuildContext context,
+  required List<Map<String ,dynamic>> allTag
+}) {
+  return ConstrainedBox(
+    constraints: BoxConstraints(
+      maxHeight: MediaQuery.of(context).size.height * 0.6
+    ),
+    child: Container(
+      color: Theme.of(context).cardTheme.color,
+      padding: const EdgeInsets.only(top: 10, bottom: 15, left: 15, right: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              Text(
+                'タグを選択',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Theme.of(context).textTheme.headline5!.color,
+                ),
+              ),
+              Spacer(),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Icon(
+                    CupertinoIcons.xmark,
+                    color: Theme.of(context).textTheme.headline5!.color,
+                    size: 22,
+                  ),
+                ),
+              )
+            ],
+          ),
+          SizedBox(height: 5,),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Container(
+                width: double.infinity,
+                child: Wrap(
+                  children: List<Widget>.generate(
+                    allTag.length, (index) {
+                      if (allTag[index][TagTable.tagName] != null) {
+                        return GestureDetector(
+                          onTap: () {
+                            //todo: 押したタグをDBに保存する
+                          },
+                          child: Container(
+                            padding: Platform.isIOS
+                                ? const EdgeInsets.only(left: 13, right: 13, top: 4, bottom: 4)
+                                : const EdgeInsets.only(left: 13, right: 13, top: 6, bottom: 8),
+                            margin: const EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5),
+                            decoration: BoxDecoration(
+                                color: Theme.of(context).bottomAppBarColor,
+                                borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                                '${allTag[index][TagTable.tagName]}'
+                            ),
+                          ),
+                        );
+                      } else {
+                        return GestureDetector(
+                          onTap: () {
+                            //todo: 新しいタグを作成する
+                          },
+                          child: Container(
+                            padding: Platform.isIOS
+                                ? const EdgeInsets.only(left: 13, right: 13, top: 4, bottom: 4)
+                                : const EdgeInsets.only(left: 13, right: 13, top: 6, bottom: 8),
+                            margin: const EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                    color: Color(0xFF5AC4CB),
+                                    width: 1
+                                )
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  CupertinoIcons.add,
+                                  size: 20,
+                                  color: Color(0xFF5AC4CB),
+                                ),
+                                Text(
+                                    'タグを作成',
+                                  style: TextStyle(
+                                    color: Color(0xFF5AC4CB),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                  ),
+                ),
+              ),
+            ),
+          )
+        ],
       ),
     ),
   );
