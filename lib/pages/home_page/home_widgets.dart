@@ -87,6 +87,7 @@ Widget homeAppBar({
 
 Widget searchBar(BuildContext context) {
   return GestureDetector(
+    behavior: HitTestBehavior.opaque,
     onTap: () {
       //todo: 検索画面を表示する
       debugPrint('検索画面表示');
@@ -359,6 +360,7 @@ Widget homeBottomBar({
 
 Widget homeOptionDialogWidget(BuildContext context) {
   return GestureDetector(
+    behavior: HitTestBehavior.opaque,
     onTap: () {
       Navigator.pop(context);
     },

@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hukaborimemo/common/common_viewmodel.dart';
 import 'package:hukaborimemo/common/model/database/db_provider.dart';
 import 'package:hukaborimemo/common/model/database/tables.dart';
 import 'package:hukaborimemo/pages/memo_page/memo_widgets.dart';
@@ -156,11 +158,17 @@ Future<void> showSelectTagBottomSheet({
 
   final result = await DBProvider.db.queryTagData();
   final List<Map<String, dynamic>> allTag = List.of(result);
+  allTag.sort((a, b){
+    return b[TagTable.tagUsedAt].toString().compareTo(a[TagTable.tagUsedAt].toString());
+  });
   final Map<String, dynamic> createTagTag = {};
   allTag.add(createTagTag);
 
   showModalBottomSheet<void>(
     context: context,
+    barrierColor: Colors.black.withOpacity(0.1),
+    isScrollControlled: true,
+    enableDrag: false,
     builder: (BuildContext context) {
       return selectTagBottomSheetWidget(
         context: context,
@@ -168,4 +176,55 @@ Future<void> showSelectTagBottomSheet({
       );
     },
   );
+}
+
+void showCreateTagPage(BuildContext context) {
+
+  final TextEditingController textEditingController = TextEditingController();
+  final errorMessageProvider = StateProvider((ref) => '');
+
+  showCupertinoDialog(
+      context: context,
+      builder: (buildContext){
+        return HookBuilder(
+          builder: (hookContext) {
+
+            final errorMessageState = useProvider(errorMessageProvider);
+
+            return createTagPageWidget(
+                context: buildContext,
+                textEditingController: textEditingController,
+                errorMessageState: errorMessageState);
+          }
+        );
+      }
+  );
+}
+
+Future<void> createdNewTag({
+  required BuildContext context,
+  required String tagName,
+  required StateController<String> errorMessageState
+}) async {
+  if (RegExp(r"\s+").hasMatch(tagName)) {
+    alertVibration();
+    errorMessageState.state = 'タグに空白は含められません。';
+  } else if (tagName.length > 10) {
+    alertVibration();
+    errorMessageState.state = 'タグは10文字以内にしてください。';
+  } else if (tagName.length == 0) {
+    //todo: 空白では作成できないようにする
+  } else {
+    //todo: タグを作成する
+    final now = DateTime.now().toString();
+    final TagTable tagTable = TagTable(
+        id: null,
+        name: tagName,
+        usedAt: now,
+        createdAt: now,
+        updatedAt: now);
+    await DBProvider.db.insertTagData(tagTable);
+    Navigator.pop(context);
+  }
+
 }
