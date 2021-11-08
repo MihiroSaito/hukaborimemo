@@ -790,74 +790,73 @@ Widget selectTagBottomSheetWidget({
             ],
           ),
           SizedBox(height: 5,),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Container(
-                width: double.infinity,
-                child: Wrap(
-                  children: List<Widget>.generate(
-                    allTag.length, (index) {
-                      if (allTag[index][TagTable.tagName] != null) {
-                        return GestureDetector(
-                          onTap: () {
-                            //todo: 押したタグをDBに保存する
-                          },
-                          child: Container(
-                            padding: Platform.isIOS
-                                ? const EdgeInsets.only(left: 13, right: 13, top: 4, bottom: 4)
-                                : const EdgeInsets.only(left: 13, right: 13, top: 6, bottom: 8),
-                            margin: const EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5),
-                            decoration: BoxDecoration(
-                                color: Theme.of(context).bottomAppBarColor,
-                                borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Text(
-                                '${allTag[index][TagTable.tagName]}'
-                            ),
+          SingleChildScrollView(
+            child: Container(
+              width: double.infinity,
+              child: Wrap(
+                children: List<Widget>.generate(
+                  allTag.length, (index) {
+                    if (allTag[index][TagTable.tagName] != null) {
+                      return GestureDetector(
+                        onTap: () {
+                          //todo: 押したタグをDBに保存する
+                        },
+                        child: Container(
+                          padding: Platform.isIOS
+                              ? const EdgeInsets.only(left: 13, right: 13, top: 4, bottom: 4)
+                              : const EdgeInsets.only(left: 13, right: 13, top: 6, bottom: 8),
+                          margin: const EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5),
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).bottomAppBarColor,
+                              borderRadius: BorderRadius.circular(20),
                           ),
-                        );
-                      } else {
-                        return GestureDetector(
-                          onTap: () {
-                            //todo: 新しいタグを作成する
-                          },
-                          child: Container(
-                            padding: Platform.isIOS
-                                ? const EdgeInsets.only(left: 13, right: 13, top: 4, bottom: 4)
-                                : const EdgeInsets.only(left: 13, right: 13, top: 6, bottom: 8),
-                            margin: const EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(
-                                    color: Color(0xFF5AC4CB),
-                                    width: 1
-                                )
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  CupertinoIcons.add,
-                                  size: 20,
+                          child: Text(
+                              '${allTag[index][TagTable.tagName]}'
+                          ),
+                        ),
+                      );
+                    } else {
+                      return GestureDetector(
+                        onTap: () {
+                          //todo: 新しいタグを作成する
+                        },
+                        child: Container(
+                          padding: Platform.isIOS
+                              ? const EdgeInsets.only(left: 13, right: 13, top: 4, bottom: 4)
+                              : const EdgeInsets.only(left: 13, right: 13, top: 6, bottom: 8),
+                          margin: const EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                  color: Color(0xFF5AC4CB),
+                                  width: 1
+                              )
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                CupertinoIcons.add,
+                                size: 20,
+                                color: Color(0xFF5AC4CB),
+                              ),
+                              Text(
+                                  'タグを作成',
+                                style: TextStyle(
                                   color: Color(0xFF5AC4CB),
                                 ),
-                                Text(
-                                    'タグを作成',
-                                  style: TextStyle(
-                                    color: Color(0xFF5AC4CB),
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        );
-                      }
+                        ),
+                      );
                     }
-                  ),
+                  }
                 ),
               ),
             ),
-          )
+          ),
+          SizedBox(height: MediaQuery.of(context).padding.bottom + 20,)
         ],
       ),
     ),
