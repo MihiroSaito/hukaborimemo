@@ -6,16 +6,6 @@ import 'package:hukaborimemo/pages/memo_page/memo_viewmodel.dart';
 
 import 'memo_widgets.dart';
 
-//todo: 本物のデータに変える
-const List<Map<String, dynamic>> sampleTags = [
-  {'id': 1, 'name': 'なぜ', 'usedAt': ''},
-  {'id': 2, 'name': 'なんのために', 'usedAt': ''},
-  {'id': 3, 'name': 'いつ', 'usedAt': ''},
-  {'id': 4, 'name': '何を', 'usedAt': ''},
-  {'id': 5, 'name': 'どこで', 'usedAt': ''},
-  {'id': 6, 'name': 'どのように', 'usedAt': ''},
-];
-
 class MemoScreen extends HookWidget {
   MemoScreen({
     Key? key,
