@@ -36,6 +36,12 @@ final queryTagDataProvider =
   }
 );
 
+final choiceRecommendedTagProvider =
+  FutureProvider.autoDispose.family<List<Map<String, dynamic>>, String>((ref, title) async {
+    return await choiceRecommendedQuestionTag(title);
+  }
+);
+
 
 Future<void> updateTitle({
   required BuildContext context,
@@ -269,4 +275,55 @@ Future<void> setTag({
   await DBProvider.db.updateMemoData(memoTable);
   context.refresh(queryMemoDataMemoProvider(memoData[MemoTable.memoParentId]));
 
+}
+
+Future<List<Map<String, dynamic>>> choiceRecommendedQuestionTag(String title) async {
+  final tags = await DBProvider.db.queryTagData();
+  List<Map<String, dynamic>> recommendedQuestionTagList = [];
+
+  for (int i = 0; i < tags.length; i++) {
+
+    final tagName = tags[i][TagTable.tagName].replaceAll("？", "");
+
+    /// titleが10文字未満だった場合
+    if (title.length < 10) {
+      if (title.contains(tagName)) {
+
+        recommendedQuestionTagList.add({
+          '${TagTable.tagId}': tags[i][TagTable.tagId],
+          '${TagTable.tagName}': tags[i][TagTable.tagName],
+        });
+
+      }
+    } else {
+
+      /// メモのタイトルの先頭から10文字取得する
+      final String firstTenChar = title.substring(0, 10);
+
+      if (firstTenChar.contains(tagName)) {
+        recommendedQuestionTagList.add({
+          '${TagTable.tagId}': tags[i][TagTable.tagId],
+          '${TagTable.tagName}': tags[i][TagTable.tagName],
+        });
+
+      } else {
+        /// メモのタイトルの最後から10文字を取得する。
+        final String lastTenChar = title.substring(title.length - 10, title.length);
+        if (lastTenChar.contains(tagName)) {
+          recommendedQuestionTagList.add({
+              '${TagTable.tagId}': tags[i][TagTable.tagId],
+              '${TagTable.tagName}': tags[i][TagTable.tagName],
+          });
+        }
+      }
+
+    }
+
+  }
+
+  if (recommendedQuestionTagList.isEmpty) {
+    return [{'${TagTable.tagId}': 1, '${TagTable.tagName}': 'なぜ？'}];
+  } else {
+    return recommendedQuestionTagList;
+  }
 }

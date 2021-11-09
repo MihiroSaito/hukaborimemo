@@ -99,7 +99,8 @@ class MemoScreen extends HookWidget {
                       isFirstPage: isFirstPage,
                       isNewOne: isNewOne,
                       textEditingController: textEditingController,
-                      tagIdState: tagIdState)
+                      tagIdState: tagIdState,
+                      initTitle: title)
                 ),
                 memoDataProvider.when(
                   loading: () => SliverToBoxAdapter(),
