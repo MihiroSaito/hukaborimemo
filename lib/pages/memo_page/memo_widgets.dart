@@ -156,7 +156,8 @@ Widget memoTitleArea({
         titleTagWidget(
             isFirstPage: isFirstPage,
             context: context,
-            tagIdState: tagIdState
+            tagIdState: tagIdState,
+            memoId: memoId
         ),
         Padding(
           padding: EdgeInsets.only(left: 5, right: 5),
@@ -192,6 +193,7 @@ Widget titleTagWidget({
   required bool isFirstPage,
   required BuildContext context,
   required StateController<int> tagIdState,
+  required int memoId
 }) {
   return Container(
     child: isFirstPage? Column(  /// メモのファーストページであった場合
@@ -225,7 +227,10 @@ Widget titleTagWidget({
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {
-              //todo: タグを選択できるようにする
+              showSelectTagBottomSheet(
+                  context: context,
+                  memoId: memoId,
+                  tagIdState: tagIdState);
             },
             child: Container(
               padding: Platform.isIOS
@@ -305,8 +310,10 @@ Widget titleTagWidget({
                       GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         onTap: () {
-                          //todo: 全てのタグを表示する
-                          showSelectTagBottomSheet(context: context);
+                          showSelectTagBottomSheet(
+                              context: context,
+                              memoId: memoId,
+                              tagIdState: tagIdState);
                         },
                         child: Container(
                           padding: Platform.isIOS
@@ -343,9 +350,7 @@ Widget titleTagWidget({
           final tagIdProvider = useProvider(queryOneTagDataProvider(tagIdState.state));
 
           return tagIdProvider.when(
-              loading: () => Container(),
-              error: (e, s) => Container(),
-              data: (data) {
+              loading: () {
                 return Column(
                   children: [
                     Container(
@@ -355,16 +360,70 @@ Widget titleTagWidget({
                         padding: Platform.isIOS
                             ? const EdgeInsets.only(left: 13, right: 13, top: 2, bottom: 2)
                             : const EdgeInsets.only(left: 13, right: 13, top: 3, bottom: 4),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Color(0xFF5AC4CB)
-                          //todo: テーマ色に合わせる
-                        ),
                         child: Text(
-                          '${data[TagTable.tagName]}',
+                          '',
                           style: TextStyle(
                               fontSize: 12,
-                              color: Colors.white
+                              color: Colors.transparent
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 5,),
+                  ],
+                );
+              },
+              error: (e, s) {
+                return Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        padding: Platform.isIOS
+                            ? const EdgeInsets.only(left: 13, right: 13, top: 2, bottom: 2)
+                            : const EdgeInsets.only(left: 13, right: 13, top: 3, bottom: 4),
+                        child: Text(
+                          '',
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.transparent
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 5,),
+                  ],
+                );
+              },
+              data: (data) {
+                return Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      alignment: Alignment.centerLeft,
+                      child: GestureDetector(
+                        onTap: () {
+                          showSelectTagBottomSheet(
+                              context: context,
+                              memoId: memoId,
+                              tagIdState: tagIdState);
+                        },
+                        child: Container(
+                          padding: Platform.isIOS
+                              ? const EdgeInsets.only(left: 13, right: 13, top: 2, bottom: 2)
+                              : const EdgeInsets.only(left: 13, right: 13, top: 3, bottom: 4),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Color(0xFF5AC4CB)
+                            //todo: テーマ色に合わせる
+                          ),
+                          child: Text(
+                            '${data[TagTable.tagName]}',
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.white
+                            ),
                           ),
                         ),
                       ),
@@ -762,7 +821,9 @@ Widget alertForDeleteMemoDialogWidget(BuildContext context) {
 
 Widget selectTagBottomSheetWidget({
   required BuildContext context,
-  required AsyncValue<List<Map<String, dynamic>>> tagDataProvider
+  required AsyncValue<List<Map<String, dynamic>>> tagDataProvider,
+  required int memoId,
+  required StateController<int> tagIdState
 }) {
   return ConstrainedBox(
     constraints: BoxConstraints(
@@ -817,8 +878,13 @@ Widget selectTagBottomSheetWidget({
                           if (data[index][TagTable.tagName] != null) {
                             return GestureDetector(
                               behavior: HitTestBehavior.opaque,
-                              onTap: () {
-                                //todo: 押したタグをDBに保存する
+                              onTap: () async {
+                                await setTag(
+                                    tagId: data[index][TagTable.tagId],
+                                    memoId: memoId,
+                                    context: context,
+                                    tagIdState: tagIdState);
+                                Navigator.pop(context);
                               },
                               child: Container(
                                 padding: Platform.isIOS

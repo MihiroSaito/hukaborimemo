@@ -168,7 +168,9 @@ void removeControllersFromList({
 }
 
 Future<void> showSelectTagBottomSheet({
-  required BuildContext context
+  required BuildContext context,
+  required int memoId,
+  required StateController<int> tagIdState
 }) async {
 
   showModalBottomSheet<void>(
@@ -184,7 +186,9 @@ Future<void> showSelectTagBottomSheet({
 
           return selectTagBottomSheetWidget(
             context: context,
-            tagDataProvider: tagDataProvider
+            tagDataProvider: tagDataProvider,
+            memoId: memoId,
+            tagIdState: tagIdState
           );
         }
       );
@@ -227,9 +231,8 @@ Future<void> createdNewTag({
     alertVibration();
     errorMessageState.state = 'タグは10文字以内にしてください。';
   } else if (tagName.length == 0) {
-    //todo: 空白では作成できないようにする
+    debugPrint('空白');
   } else {
-    //todo: タグを作成する
     final now = DateTime.now().toString();
     final TagTable tagTable = TagTable(
         id: null,
@@ -241,5 +244,29 @@ Future<void> createdNewTag({
     context.refresh(queryTagDataProvider);
     Navigator.pop(context);
   }
+
+}
+
+Future<void> setTag({
+  required int tagId,
+  required int memoId,
+  required BuildContext context,
+  required StateController<int> tagIdState
+}) async {
+
+  final memoData = await DBProvider.db.queryOneMemoData(memoId);
+
+  tagIdState.state = tagId;
+
+  final MemoTable memoTable = MemoTable(
+      id: memoId,
+      parentId: memoData[MemoTable.memoParentId],
+      idTree: memoData[MemoTable.memoIdTree],
+      text: memoData[MemoTable.memoText],
+      tagId: tagId,
+      createdAt: null,
+      updateAt:  memoData[MemoTable.memoUpdatedAt]);
+  await DBProvider.db.updateMemoData(memoTable);
+  context.refresh(queryMemoDataMemoProvider(memoData[MemoTable.memoParentId]));
 
 }
