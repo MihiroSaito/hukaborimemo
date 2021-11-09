@@ -340,7 +340,7 @@ Widget titleTagWidget({
     ) : HookBuilder(  /// タグが設定されていた場合
         builder: (hookContext) {
 
-          final tagIdProvider = useProvider(queryTagDataProvider(tagIdState.state));
+          final tagIdProvider = useProvider(queryOneTagDataProvider(tagIdState.state));
 
           return tagIdProvider.when(
               loading: () => Container(),
@@ -762,7 +762,7 @@ Widget alertForDeleteMemoDialogWidget(BuildContext context) {
 
 Widget selectTagBottomSheetWidget({
   required BuildContext context,
-  required List<Map<String ,dynamic>> allTag
+  required AsyncValue<List<Map<String, dynamic>>> tagDataProvider
 }) {
   return ConstrainedBox(
     constraints: BoxConstraints(
@@ -807,71 +807,77 @@ Widget selectTagBottomSheetWidget({
               child: Container(
                 width: double.infinity,
                 padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 20),
-                child: Wrap(
-                  children: List<Widget>.generate(
-                    allTag.length, (index) {
-                      if (allTag[index][TagTable.tagName] != null) {
-                        return GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          onTap: () {
-                            //todo: 押したタグをDBに保存する
-                          },
-                          child: Container(
-                            padding: Platform.isIOS
-                                ? const EdgeInsets.only(left: 13, right: 13, top: 4, bottom: 4)
-                                : const EdgeInsets.only(left: 13, right: 13, top: 6, bottom: 8),
-                            margin: const EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5),
-                            decoration: BoxDecoration(
-                                color: Theme.of(context).bottomAppBarColor,
-                                borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Text(
-                                '${allTag[index][TagTable.tagName]}'
-                            ),
-                          ),
-                        );
-                      } else {
-                        return GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          onTap: () {
-                            showCreateTagPage(context);
-                          },
-                          child: Container(
-                            padding: Platform.isIOS
-                                ? const EdgeInsets.only(left: 13, right: 13, top: 4, bottom: 4)
-                                : const EdgeInsets.only(left: 13, right: 13, top: 6, bottom: 8),
-                            margin: const EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(
-                                  //todo: テーマ色に合わせる
-                                    color: Color(0xFF5AC4CB),
-                                    width: 1
-                                )
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  CupertinoIcons.add,
-                                  size: 15,
-                                  //todo: テーマ色に合わせる
-                                  color: Color(0xFF5AC4CB),
+                child: tagDataProvider.when(
+                  loading: () => Container(),
+                  error: (e, s) => Container(),
+                  data: (data) {
+                    return Wrap(
+                      children: List<Widget>.generate(
+                        data.length, (index) {
+                          if (data[index][TagTable.tagName] != null) {
+                            return GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () {
+                                //todo: 押したタグをDBに保存する
+                              },
+                              child: Container(
+                                padding: Platform.isIOS
+                                    ? const EdgeInsets.only(left: 13, right: 13, top: 4, bottom: 4)
+                                    : const EdgeInsets.only(left: 13, right: 13, top: 6, bottom: 8),
+                                margin: const EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5),
+                                decoration: BoxDecoration(
+                                    color: Theme.of(context).bottomAppBarColor,
+                                    borderRadius: BorderRadius.circular(20),
                                 ),
-                                Text(
-                                    'タグを作成',
-                                  style: TextStyle(
-                                    //todo: テーマ色に合わせる
-                                    color: Color(0xFF5AC4CB),
-                                  ),
+                                child: Text(
+                                    '${data[index][TagTable.tagName]}'
                                 ),
-                              ],
-                            ),
-                          ),
-                        );
-                      }
-                    }
-                  ),
+                              ),
+                            );
+                          } else {
+                            return GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () {
+                                showCreateTagPage(context);
+                              },
+                              child: Container(
+                                padding: Platform.isIOS
+                                    ? const EdgeInsets.only(left: 13, right: 13, top: 4, bottom: 4)
+                                    : const EdgeInsets.only(left: 13, right: 13, top: 6, bottom: 8),
+                                margin: const EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                      //todo: テーマ色に合わせる
+                                        color: Color(0xFF5AC4CB),
+                                        width: 1
+                                    )
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      CupertinoIcons.add,
+                                      size: 15,
+                                      //todo: テーマ色に合わせる
+                                      color: Color(0xFF5AC4CB),
+                                    ),
+                                    Text(
+                                        'タグを作成',
+                                      style: TextStyle(
+                                        //todo: テーマ色に合わせる
+                                        color: Color(0xFF5AC4CB),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+                        }
+                      ),
+                    );
+                  }
                 ),
               ),
             ),

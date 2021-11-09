@@ -9,6 +9,34 @@ import 'package:hukaborimemo/common/model/database/db_provider.dart';
 import 'package:hukaborimemo/common/model/database/tables.dart';
 import 'package:hukaborimemo/pages/memo_page/memo_widgets.dart';
 
+
+final queryMemoDataMemoProvider =
+  FutureProvider.autoDispose.family<List<Map<String, dynamic>>, int>((ref, memoId) async {
+    return await DBProvider.db
+        .queryMemoData(memoId);
+  }
+);
+
+final queryOneTagDataProvider =
+  FutureProvider.autoDispose.family<Map<String, dynamic>, int>((ref, tagId) async {
+    return await DBProvider.db.queryOneTagData(tagId);
+  }
+);
+
+final queryTagDataProvider =
+  FutureProvider.autoDispose<List<Map<String, dynamic>>>((ref) async {
+    var result = await DBProvider.db.queryTagData();
+    final List<Map<String, dynamic>> allTag = List.of(result);
+    allTag.sort((a, b){
+      return b[TagTable.tagUsedAt].toString().compareTo(a[TagTable.tagUsedAt].toString());
+    });
+    final Map<String, dynamic> createTagTag = {};
+    allTag.add(createTagTag);
+    return allTag;
+  }
+);
+
+
 Future<void> updateTitle({
   required BuildContext context,
   required int memoId,
@@ -28,19 +56,6 @@ Future<void> updateTitle({
       updateAt: now);
   final int id = await DBProvider.db.updateMemoData(memoTable);
 }
-
-final queryMemoDataMemoProvider =
-  FutureProvider.autoDispose.family<List<Map<String, dynamic>>, int>((ref, memoId) async {
-    return await DBProvider.db
-        .queryMemoData(memoId);
-  }
-);
-
-final queryTagDataProvider =
-  FutureProvider.autoDispose.family<Map<String, dynamic>, int>((ref, tagId) async {
-    return await DBProvider.db.queryOneTagData(tagId);
-  }
-);
 
 Future<void> addNewMemo({
   required BuildContext context,
@@ -156,23 +171,22 @@ Future<void> showSelectTagBottomSheet({
   required BuildContext context
 }) async {
 
-  final result = await DBProvider.db.queryTagData();
-  final List<Map<String, dynamic>> allTag = List.of(result);
-  allTag.sort((a, b){
-    return b[TagTable.tagUsedAt].toString().compareTo(a[TagTable.tagUsedAt].toString());
-  });
-  final Map<String, dynamic> createTagTag = {};
-  allTag.add(createTagTag);
-
   showModalBottomSheet<void>(
     context: context,
     barrierColor: Colors.black.withOpacity(0.1),
     isScrollControlled: true,
     enableDrag: false,
     builder: (BuildContext context) {
-      return selectTagBottomSheetWidget(
-        context: context,
-        allTag: allTag
+      return HookBuilder(
+        builder: (hookContext) {
+
+          final tagDataProvider = useProvider(queryTagDataProvider);
+
+          return selectTagBottomSheetWidget(
+            context: context,
+            tagDataProvider: tagDataProvider
+          );
+        }
       );
     },
   );
@@ -224,6 +238,7 @@ Future<void> createdNewTag({
         createdAt: now,
         updatedAt: now);
     await DBProvider.db.insertTagData(tagTable);
+    context.refresh(queryTagDataProvider);
     Navigator.pop(context);
   }
 
