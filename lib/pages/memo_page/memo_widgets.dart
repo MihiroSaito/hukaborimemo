@@ -298,7 +298,6 @@ class TitleTagWidget extends HookWidget {
                         HookBuilder(
                             builder: (hookContext) {
 
-                              //todo: titleを固定する
                               final choiceRecommendedTagData = useProvider(choiceRecommendedTagProvider(title));
 
                               return choiceRecommendedTagData.when(
@@ -307,14 +306,17 @@ class TitleTagWidget extends HookWidget {
                                   data: (data) {
                                     return Row(
                                       children: List<Widget>.generate(
-                                        //todo: data.lengthに変える
                                           data.length, (index) {
                                         return Container(
                                           margin: const EdgeInsets.only(right: 10),
                                           child: GestureDetector(
                                             behavior: HitTestBehavior.opaque,
                                             onTap: () {
-                                              //todo: 推奨タグにあるタグをDBに保存する
+                                              setTag(
+                                                  tagId: data[index][TagTable.tagId],
+                                                  memoId: memoId,
+                                                  context: context,
+                                                  tagIdState: tagIdState);
                                             },
                                             child: Container(
                                               padding: Platform.isIOS
@@ -329,7 +331,6 @@ class TitleTagWidget extends HookWidget {
                                                   )
                                               ),
                                               child: Text(
-                                                //todo: titleを利用して推奨タグを変更＆表示する
                                                 '${data[index][TagTable.tagName]}',
                                                 style: TextStyle(
                                                     fontSize: 13,
