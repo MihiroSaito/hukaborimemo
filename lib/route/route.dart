@@ -6,6 +6,7 @@ import 'package:hukaborimemo/pages/home_page/home_viewmodel.dart';
 import 'package:hukaborimemo/pages/memo_page/memo_screen.dart';
 import 'package:hukaborimemo/pages/memo_page/memo_viewmodel.dart';
 import 'package:hukaborimemo/pages/setting_page/setting_screen.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 Future<void> toMemoScreen({
   required BuildContext context,
@@ -19,7 +20,7 @@ Future<void> toMemoScreen({
   required TextEditingController? textEditingController
 }) async {
   Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => MemoScreen(
+      MaterialWithModalsPageRoute(builder: (_) => MemoScreen(
         memoId: memoId,
         parentId: parentId,
         title: title,

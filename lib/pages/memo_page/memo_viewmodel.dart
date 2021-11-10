@@ -2,12 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hukaborimemo/common/common_viewmodel.dart';
 import 'package:hukaborimemo/common/model/database/db_provider.dart';
 import 'package:hukaborimemo/common/model/database/tables.dart';
 import 'package:hukaborimemo/pages/memo_page/memo_widgets.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 
 final queryMemoDataMemoProvider =
@@ -327,3 +329,25 @@ Future<List<Map<String, dynamic>>> choiceRecommendedQuestionTag(String title) as
     return recommendedQuestionTagList;
   }
 }
+
+Future<void> showSummaryOfMemoSheet({
+  required BuildContext context,
+  required String memoTitle
+}) async {
+
+  //todo: 結論をDBから取得し、Controllerのtextに入れる
+
+  final TextEditingController textEditingController = TextEditingController();
+
+  showCupertinoModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return summaryOfMemoSheetWidget(
+            context: context,
+            memoTitle: memoTitle,
+            textEditingController: textEditingController);
+      }
+  );
+}
+
+

@@ -67,7 +67,10 @@ Widget memoAppBar({
               color: Colors.transparent,
               child: InkWell(
                 onTap: () {
-                  //todo: この深堀りのまとめをできるページorなにかを表示する
+                  //todo: memoTitleを取得する(現在仮データ使用中)
+                  showSummaryOfMemoSheet(
+                      context: context,
+                      memoTitle: 'なぜお金がたまらないのか');
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8),
@@ -725,7 +728,6 @@ Widget addItemButton({
   required List<FocusNode> focusNodeList
 }) {
   return GestureDetector(
-    behavior: HitTestBehavior.opaque,
     onTap: () async {
       FocusScope.of(context).unfocus();
       await addNewMemo(
@@ -1116,6 +1118,103 @@ Widget createTagPageWidget({
               ],
             ),
           ),
+        ),
+      ),
+    ),
+  );
+}
+
+Widget summaryOfMemoSheetWidget({
+  required BuildContext context,
+  required String memoTitle,
+  required TextEditingController textEditingController
+}) {
+  
+  return Material(
+    child: GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Container(
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.only(top: 20, bottom: 10, left: 15, right: 15),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.only(top: 5, bottom: 5),
+                      child: Text(
+                        '$memoTitle',
+                        style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold
+                        ),
+                      ),
+                    ),
+                  ),
+                  Material(
+                    borderRadius: BorderRadius.all(Radius.circular(50)),
+                    color: Theme.of(context).indicatorColor,
+                    clipBehavior: Clip.antiAlias,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Icon(
+                              CupertinoIcons.xmark,
+                              size: 15,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: 1,
+              color: Theme.of(context).indicatorColor,
+            ),
+            Container(
+              padding: const EdgeInsets.only(top: 10, bottom: 20, left: 15, right: 15),
+              child: TextField(
+                controller: textEditingController,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.only(top: 10, bottom: 10),
+                  isDense: true,
+                  hintText: '結論を入力',
+                  hintStyle: TextStyle(
+                    color: Theme.of(context).textTheme.headline6!.color,
+                    fontSize: 16,
+                  ),
+                ),
+                maxLines: null,
+                textInputAction: TextInputAction.newline,
+                autofocus: true, // todo: 結論が既にある場合には、falseにする？
+                style: TextStyle(
+                    fontSize: 16,
+                    height: 1.3
+                ),
+                onChanged: (text) {
+                  //todo: DBにtextを保存する
+                },
+              ),
+            )
+          ],
         ),
       ),
     ),
