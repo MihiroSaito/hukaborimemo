@@ -350,4 +350,12 @@ Future<void> showSummaryOfMemoSheet({
   );
 }
 
+void showMemoOptionDialog(BuildContext context) {
+  showCupertinoDialog(
+      context: context,
+      builder: (buildContext){
+        return memoOptionDialogWidget(buildContext);
+      }
+  );
+}
 

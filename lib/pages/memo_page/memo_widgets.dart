@@ -90,6 +90,7 @@ Widget memoAppBar({
               child: InkWell(
                 onTap: () {
                   //todo: メモページのオプションを表示する
+                  showMemoOptionDialog(context);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8),
@@ -1129,7 +1130,7 @@ Widget summaryOfMemoSheetWidget({
   required String memoTitle,
   required TextEditingController textEditingController
 }) {
-  
+
   return Material(
     child: GestureDetector(
       onTap: () {
@@ -1212,6 +1213,81 @@ Widget summaryOfMemoSheetWidget({
                 onChanged: (text) {
                   //todo: DBにtextを保存する
                 },
+              ),
+            )
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+Widget memoOptionDialogWidget(BuildContext context) {
+  return GestureDetector(
+    behavior: HitTestBehavior.opaque,
+    onTap: () {
+      Navigator.pop(context);
+    },
+    child: Material(
+      color: Colors.transparent,
+      child: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            SizedBox(height: 60,),
+            Container(
+              //todo: タブレットサイズの対応をする
+              width: MediaQuery.of(context).size.width * 0.6,
+              height: 50,
+              margin: const EdgeInsets.only(right: 20),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).cardTheme.color,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      spreadRadius: 10,
+                      blurRadius: 20,
+                      offset: Offset(0, 0),
+                    )
+                  ]
+              ),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Material(
+                      borderRadius: BorderRadius.circular(15),
+                      clipBehavior: Clip.antiAlias,
+                      color: Theme.of(context).cardTheme.color,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                          //todo: この項目を削除する
+
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.only(left: 15, right: 15, top: 1),
+                          child: Row(
+                            children: [
+                              Icon(
+                                CupertinoIcons.trash,
+                                size: 21,
+                                color: Colors.red,
+                              ),
+                              SizedBox(width: 5,),
+                              Text(
+                                'この項目を削除する',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             )
           ],
