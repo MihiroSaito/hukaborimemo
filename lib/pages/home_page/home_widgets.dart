@@ -91,8 +91,6 @@ Widget searchBar(BuildContext context) {
   return GestureDetector(
     behavior: HitTestBehavior.opaque,
     onTap: () {
-      //todo: 検索画面を表示する
-      debugPrint('検索画面表示');
       showSearchPage(context);
     },
     child: Container(
@@ -616,10 +614,18 @@ Widget searchPageWidget({
                           itemCount: data.length,
                         );
                       } else if (data.length == 0 && keyword != '') {
-                        //todo: 検索結果がない
-                        return Container();
+                        return Container(
+                          padding: const EdgeInsets.only(top: 10, left: 15, right: 15),
+                          child: Text(
+                            'キーワードに一致するメモが\n見つかりません。',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Theme.of(context).textTheme.headline6!.color
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        );
                       } else {
-                        //todo: 検索する前
                         return Container();
                       }
                     }
