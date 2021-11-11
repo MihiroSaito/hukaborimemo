@@ -7,6 +7,7 @@ import 'package:hukaborimemo/pages/home_page/home_widgets.dart';
 class HomeScreen extends HookWidget {
   HomeScreen({Key? key}) : super(key: key);
   final isDisplayedAppbarProvider = StateProvider((ref) => false);
+  final tapEffectProvider = StateProvider((ref) => false);
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +17,7 @@ class HomeScreen extends HookWidget {
     final ScrollController controller = useScrollController();
     final isDisplayedAppbar = useProvider(isDisplayedAppbarProvider);
     final memoDataProvider = useProvider(queryMemoDataHomeProvider);
+    final tapEffect = useProvider(tapEffectProvider);
 
     useEffect(() {
       controller.addListener(() {
@@ -83,7 +85,8 @@ class HomeScreen extends HookWidget {
                 context: context,
                 safeAreaPaddingBottom: safeAreaPadding.bottom,
                 windowSize: windowSize,
-                memoDataProvider: memoDataProvider),
+                memoDataProvider: memoDataProvider,
+                tapEffect: tapEffect),
           ),
           widgetWhenThereIsNoMemo(
               context: context,

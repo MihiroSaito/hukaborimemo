@@ -89,7 +89,6 @@ Widget memoAppBar({
               color: Colors.transparent,
               child: InkWell(
                 onTap: () {
-                  //todo: メモページのオプションを表示する
                   showMemoOptionDialog(context);
                 },
                 child: Padding(

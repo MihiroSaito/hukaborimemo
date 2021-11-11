@@ -253,7 +253,8 @@ Widget homeBottomBar({
   required BuildContext context,
   required double safeAreaPaddingBottom,
   required Size windowSize,
-  required AsyncValue<List<Map<String, dynamic>>> memoDataProvider
+  required AsyncValue<List<Map<String, dynamic>>> memoDataProvider,
+  required StateController<bool> tapEffect
 }) {
   return Stack(
     children: [
@@ -324,32 +325,56 @@ Widget homeBottomBar({
         child: Container(
           child: Center(
             child: GestureDetector(
+              onTapDown: (detail) {
+                tapEffect.state = true;
+              },
               onTap: () async {
-                //todo: ボタンを押した時のへフェクトを追加する。（グラデーションのためInkWellは使えないと思われる）
                 await createNewMemo(context);
               },
-              child: Container(
-                width: windowSize.width * 0.5,
-                height: 50,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Color(0xFF5EBADD), Color(0xFF50D6A9)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight
-                  ),
-                  //todo: （グラデーション）テーマで管理できるように色をメソッドで管理する
-                  borderRadius: BorderRadius.circular(40),
-                ),
-                child: Container(
-                  height: double.infinity,
-                  width: double.infinity,
-                  child: Center(
-                    child: Icon(
-                      CupertinoIcons.add,
-                      color: Colors.white,
+              onTapCancel: () => tapEffect.state = false,
+              onTapUp: (details) => tapEffect.state = false,
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      width: windowSize.width * 0.5,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Color(0xFF5EBADD), Color(0xFF50D6A9)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight
+                        ),
+                        //todo: （グラデーション）テーマで管理できるように色をメソッドで管理する
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                      child: Container(
+                        height: double.infinity,
+                        width: double.infinity,
+                        child: Center(
+                          child: Icon(
+                            CupertinoIcons.add,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  tapEffect.state?
+                    Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        width: windowSize.width * 0.5,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.15),
+                          //todo: （グラデーション）テーマで管理できるように色をメソッドで管理する
+                          borderRadius: BorderRadius.circular(40),
+                        ),
+                      ),
+                    ) : Container(),
+                ],
               ),
             ),
           ),
