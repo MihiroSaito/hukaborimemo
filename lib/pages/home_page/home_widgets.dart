@@ -3,8 +3,10 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hukaborimemo/common/model/database/tables.dart';
+import 'package:hukaborimemo/common/viewmodel/search/search_notifier.dart';
 import 'package:hukaborimemo/pages/home_page/home_viewmodel.dart';
 import 'package:hukaborimemo/route/route.dart';
 
@@ -91,6 +93,7 @@ Widget searchBar(BuildContext context) {
     onTap: () {
       //todo: 検索画面を表示する
       debugPrint('検索画面表示');
+      showSearchPage(context);
     },
     child: Container(
       decoration: BoxDecoration(
@@ -493,5 +496,140 @@ Widget widgetWhenThereIsNoMemo({
           return Container();
         }
       }
+  );
+}
+
+Widget searchPageWidget({
+  required BuildContext context
+}) {
+  return Material(
+    color: Theme.of(context).scaffoldBackgroundColor,
+    child: Container(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      child: SafeArea(
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.only(top: 20, bottom: 20, left: 15, right: 15),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Theme.of(context).dialogBackgroundColor
+                      ),
+                      child: Center(
+                        child: Padding(
+                          padding: Platform.isIOS
+                              ? const EdgeInsets.all(8.0)
+                              : const EdgeInsets.all(10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Icon(
+                                  CupertinoIcons.search,
+                                  size: 20,
+                                  color: Color(0xFF868E96)
+                              ),
+                              SizedBox(width: 5,),
+                              Expanded(
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    contentPadding: EdgeInsets.only(top: 0, bottom: 0),
+                                    isDense: true,
+                                    hintText: '検索',
+                                    hintStyle: TextStyle(
+                                      fontSize: 17,
+                                      color: Color(0xFF868E96)
+                                    )
+                                  ),
+                                  autofocus: true,
+                                  style: TextStyle(
+                                    fontSize: 16
+                                  ),
+                                  maxLines: 1,
+                                  textInputAction: TextInputAction.search,
+                                  onChanged: (text) {
+                                    context.read(searchNotifierProvider.notifier).updateKeyword(text);
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(
+                        'キャンセル',
+                        style: TextStyle(
+                          color: Color(0xFF5AC4CB)
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Expanded(
+              child: HookBuilder(
+                builder: (hookContext) {
+
+                  final keyword = useProvider(searchNotifierProvider).keyword;
+                  final searchedMemoData = useProvider(querySearchedMemoDataProvider(keyword));
+
+                  return searchedMemoData.when(
+                    loading: () => Container(),
+                    error: (e, s) => Container(),
+                    data: (data) {
+
+                      if (data.length != 0) {
+                        return GridView.builder(
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              mainAxisSpacing: 10.0,
+                              crossAxisSpacing: 10.0,
+                              crossAxisCount: 2,
+                              childAspectRatio: 1.3
+                          ),
+                          padding: const EdgeInsets.only(left: 15, right: 15, bottom: 50),
+                          itemBuilder: (BuildContext gridContext, int index) {
+                            return gridContent(
+                                context: context,
+                                memoId: data[index][MemoTable.memoId],
+                                parentId: data[index][MemoTable.memoParentId],
+                                memoTitle: data[index][MemoTable.memoText],
+                                tagId: data[index][MemoTable.memoTagId],
+                                //todo: 並び順によってcreatedAtを使うのかupdatedAtを使うのか変える
+                                dateTime: data[index][MemoTable.memoUpdatedAt]);
+                          },
+                          itemCount: data.length,
+                        );
+                      } else if (data.length == 0 && keyword != '') {
+                        //todo: 検索結果がない
+                        return Container();
+                      } else {
+                        //todo: 検索する前
+                        return Container();
+                      }
+                    }
+                  );
+                }
+              )
+            )
+          ],
+        ),
+      ),
+    ),
   );
 }

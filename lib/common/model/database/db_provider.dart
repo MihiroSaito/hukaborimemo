@@ -98,6 +98,25 @@ class DBProvider {
     return extractedData.first;
   }
 
+  Future<List<Map<String, dynamic>>> searchMemoData(String? keyword) async {
+    List<Map<String, dynamic>> searchedMemoList = [];
+    if (keyword != '') {
+      final _db = await database;
+      List<Map<String, dynamic>> allMemoData = await _db.query('memo');
+      List<Map<String, dynamic>> extractedData = allMemoData
+          .where((value) => value[MemoTable.memoParentId] == 0)
+          .toList();
+      for (int i = 0; i < extractedData.length; i++) {
+        if (extractedData[i][MemoTable.memoText].contains(keyword)) {
+          searchedMemoList.add(extractedData[i]);
+        }
+      }
+      return searchedMemoList;
+    } else {
+      return searchedMemoList;
+    }
+  }
+
   Future<List<Map<String, dynamic>>> queryTagData() async {
     final _db = await database;
     List<Map<String, dynamic>> allTagData = await _db.query('tag');
@@ -112,7 +131,6 @@ class DBProvider {
         .toList();
     return extractedData.first;
   }
-
 
   /// ------------------------ update ------------------------
 

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:hukaborimemo/common/common_viewmodel.dart';
+import 'package:hukaborimemo/common/viewmodel/common_viewmodel.dart';
 import 'package:hukaborimemo/common/model/database/db_provider.dart';
 import 'package:hukaborimemo/common/model/database/tables.dart';
 import 'package:hukaborimemo/pages/memo_page/memo_widgets.dart';

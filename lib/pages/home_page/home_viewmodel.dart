@@ -11,6 +11,51 @@ import 'package:intl/date_symbol_data_local.dart';
 
 import 'home_widgets.dart';
 
+
+final queryMemoDataHomeProvider =
+FutureProvider.autoDispose<List<Map<String, dynamic>>>((ref) async {
+
+  final List<Map<String, dynamic>> memoData = await DBProvider.db
+      .queryMemoData(0);
+
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final String sortOrder = prefs.getString('${PrefsKeys.sortOrder}') ??
+      'edit';
+
+  switch(sortOrder){
+    case 'newer': // 作成した日時が最近のものから取得
+      memoData.sort((a, b){
+        return b[MemoTable.memoCreatedAt]
+            .toString()
+            .compareTo(a[MemoTable.memoCreatedAt].toString());
+      });
+      break;
+    case 'older': // 作成した日時が古いものから取得
+      memoData.sort((a, b){
+        return a[MemoTable.memoCreatedAt]
+            .toString()
+            .compareTo(b[MemoTable.memoCreatedAt].toString());
+      });
+      break;
+    default: // 編集が加えられた
+      memoData.sort((a, b){
+        return b[MemoTable.memoCreatedAt]
+            .toString()
+            .compareTo(a[MemoTable.memoCreatedAt].toString());
+      });
+      break;
+  }
+  return memoData;
+}
+);
+
+final querySearchedMemoDataProvider =
+  FutureProvider.autoDispose.family<List<Map<String, dynamic>>, String?>((ref, keyword) async {
+    var result = await DBProvider.db.searchMemoData(keyword);
+    return result;
+  }
+);
+
 void showHomeOptionDialog(BuildContext context) {
   showCupertinoDialog(
       context: context,
@@ -55,43 +100,6 @@ Future<void> createNewMemo(BuildContext context) async {
   context.refresh(queryMemoDataHomeProvider);
 }
 
-final queryMemoDataHomeProvider =
-    FutureProvider.autoDispose<List<Map<String, dynamic>>>((ref) async {
-
-      final List<Map<String, dynamic>> memoData = await DBProvider.db
-          .queryMemoData(0);
-
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      final String sortOrder = prefs.getString('${PrefsKeys.sortOrder}') ??
-          'edit';
-
-      switch(sortOrder){
-        case 'newer': // 作成した日時が最近のものから取得
-          memoData.sort((a, b){
-            return b[MemoTable.memoCreatedAt]
-                .toString()
-                .compareTo(a[MemoTable.memoCreatedAt].toString());
-          });
-          break;
-        case 'older': // 作成した日時が古いものから取得
-          memoData.sort((a, b){
-            return a[MemoTable.memoCreatedAt]
-                .toString()
-                .compareTo(b[MemoTable.memoCreatedAt].toString());
-          });
-          break;
-        default: // 編集が加えられた
-          memoData.sort((a, b){
-            return b[MemoTable.memoCreatedAt]
-                .toString()
-                .compareTo(a[MemoTable.memoCreatedAt].toString());
-          });
-          break;
-      }
-      return memoData;
-    }
-);
-
 
 String getCreatedDate(String dateTimeString) {
   initializeDateFormatting("ja_JP");
@@ -113,3 +121,15 @@ String getCreatedDate(String dateTimeString) {
     return formatted;
   }
 }
+
+void showSearchPage(BuildContext context) {
+  showDialog(
+      context: context,
+      useSafeArea: false,
+      builder: (buildContext){
+        return searchPageWidget(context: buildContext);
+      }
+  );
+}
+
+
