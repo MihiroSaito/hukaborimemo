@@ -1,6 +1,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hukaborimemo/common/viewmodel/common_viewmodel.dart';
+import 'package:hukaborimemo/setting/url.dart';
 import 'package:package_info/package_info.dart';
 
 Future<void> settingFunctions({
@@ -20,6 +22,7 @@ Future<void> settingFunctions({
       break;
     case 'お問い合わせ・ご意見':
       //todo: URLを使ってGoogleFormに飛ばす
+      launchURL(Url.contactUrl);
       break;
     case 'アプリを評価する':
       //todo: ストアIDを使って各ストアのレビューへ
